@@ -190,46 +190,30 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th>1</th>
-                    <td>Datu Puti Vinegar</td>
-                    <td>30 Php</td>
-                    <td>500 ml</td>
-                    <td class="text-center">
-                      <button class="btn btn-primary me-2">Unarchive</button>
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>2</th>
-                    <td>Kopiko</td>
-                    <td>2 Php</td>
-                    <td>1 pc</td>
-                    <td class="text-center">
-                      <button class="btn btn-primary me-2">Unarchive</button>
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>3</th>
-                    <td>Knorr Cubes</td>
-                    <td>20 Php</td>
-                    <td>40 g</td>
-                    <td class="text-center">
-                      <button class="btn btn-primary me-2">Unarchive</button>
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>4</th>
-                    <td>Sample Product</td>
-                    <td>30 Php</td>
-                    <td>500 ml</td>
-                    <td class="text-center">
-                      <button class="btn btn-primary me-2">Unarchive</button>
-                      <button class="btn btn-danger">Delete</button>
-                    </td>
-                  </tr>
+                  <?php
+                  include_once __DIR__ . '/Persistence/dbconn.php';
+                  $sql = "SELECT Id, Name, Price, QuantityPerUnit, Unit FROM Product WHERE Archived = TRUE ORDER BY Name ASC";
+                  $result = $conn->query($sql);
+                  if ($result && $result->num_rows > 0) {
+                      $i = 1;
+                      while ($row = $result->fetch_assoc()) {
+                          $unitSize = $row['QuantityPerUnit'] . ' ' . $row['Unit'];
+                          echo '<tr data-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
+                          echo '<th>' . $i . '</th>';
+                          echo '<td>' . htmlspecialchars($row['Name']) . '</td>';
+                          echo '<td>' . number_format($row['Price'], 2) . ' Php</td>';
+                          echo '<td>' . htmlspecialchars($unitSize) . '</td>';
+                          echo '<td class="text-center">';
+                          echo '<button class="btn btn-primary me-2">Unarchive</button>';
+                          echo '<button class="btn btn-danger">Delete</button>';
+                          echo '</td>';
+                          echo '</tr>';
+                          $i++;
+                      }
+                  } else {
+                      echo '<tr><td colspan="5" class="text-center">No archived products found.</td></tr>';
+                  }
+                  ?>
                 </tbody>
               </table>
             </div>
@@ -310,7 +294,7 @@
             <?php
             include_once __DIR__ . '/Persistence/dbconn.php';
 
-            $sql = "SELECT Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE ORDER BY Name ASC";
+            $sql = "SELECT Id, Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE ORDER BY Name ASC";
             $result = $conn->query($sql);
             if ($result && $result->num_rows > 0) {
                 $i = 1;
@@ -318,6 +302,7 @@
                     $name = $row['Name'];
                     $unitSize = $row['QuantityPerUnit'] . ' ' . $row['Unit'];
                     echo '<tr data-bs-toggle="modal" data-bs-target="#read-product"';
+                    echo ' data-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '"';
                     echo ' data-name="' . htmlspecialchars($name, ENT_QUOTES) . '"';
                     echo ' data-price="' . htmlspecialchars($row['Price'], ENT_QUOTES) . '"';
                     echo ' data-unit="' . htmlspecialchars($row['Unit'], ENT_QUOTES) . '"';
@@ -343,6 +328,22 @@
     </div>
   </div>
 
+  <script>
+  const productNames = [
+    <?php
+      include_once __DIR__ . '/Persistence/dbconn.php';
+      $query = "SELECT Name FROM Product;";
+      $result = $conn->query($query);
+      if ($result && $result->num_rows > 0) {
+        $names = [];
+        while($row = $result->fetch_assoc()) {
+          $names[] = '"' . addslashes($row['Name']) . '"';
+        }
+        echo implode(',', $names);
+      }
+    ?>
+  ];
+  </script>
   <script src="js/product.js"></script>
   </body>
 </html>
