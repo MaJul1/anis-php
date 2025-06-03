@@ -70,22 +70,26 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row" class="d-none d-md-block">1</th>
-                <td>Datu Puti Soy Sauce 500ml 50Php</td>
-                <td>4</td>
-              </tr>
-              <tr>
-                <th scope="row" class="d-none d-md-block">2</th>
-                <td>Sample Product 2</td>
-                <td>2</td>
-              </tr>
-              <tr>
-                <th scope="row" class="d-none d-md-block">3</th>
-                <td>Sample Product 3</td>
-                <td>1</td>
-              </tr>
-              <!-- Add more rows as needed to test scrolling -->
+            <?php
+              include_once __DIR__ . '/Persistence/dbconn.php';
+
+              $sql = "SELECT Name, QuantityPerUnit, Unit, Price, CurrentStockNumber FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE";
+              $result = $conn->query($sql);
+              if ($result && $result->num_rows > 0) {
+                  $i = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      $name = $row['Name'] . ', ' . $row['QuantityPerUnit'] . ', ' . $row['Unit'] . ', ' . number_format($row['Price'], 2);
+                      echo '<tr>';
+                      echo '<th scope="row" class="d-none d-md-block">' . $i . '</th>';
+                      echo '<td>' . htmlspecialchars($name) . '</td>';
+                      echo '<td>' . $row['CurrentStockNumber'] . '</td>';
+                      echo '</tr>';
+                      $i++;
+                  }
+              } else {
+                  echo '<tr><td colspan="3" class="text-center">No products are below the out of stock threshold.</td></tr>';
+              }
+            ?>
             </tbody>
           </table>
         </div>
@@ -107,25 +111,35 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row" class="d-none d-md-block">1</th>
-                <td>Sample Product 1</td>
-                <td>July 1, 2025</td>
-                <td>40</td>
-              </tr>
-              <tr>
-                <th scope="row" class="d-none d-md-block">2</th>
-                <td>Sample Product 2</td>
-                <td>July 1, 2025</td>
-                <td>40</td>
-              </tr>
-              <tr>
-                <th scope="row" class="d-none d-md-block">3</th>
-                <td>Sample Product 3</td>
-                <td>July 1, 2025</td>
-                <td>40</td>
-              </tr>
-              <!-- Add more rows as needed to test scrolling -->
+            <?php
+              $today = date('Y-m-d');
+              $sql = "SELECT p.Name, p.QuantityPerUnit, p.Unit, p.Price, rd.ExpirationDate, rd.Count
+                      FROM RestockDetail rd
+                      INNER JOIN Product p ON rd.ProductId = p.Id
+                      WHERE rd.ExpirationDate IS NOT NULL
+                        AND rd.IsExpiredChecked = FALSE
+                        AND p.Archived = FALSE
+                        AND rd.ExpirationDate <= DATE_ADD('$today', INTERVAL p.ExpirationWarningThreshold DAY)
+                        AND rd.ExpirationDate >= '$today' 
+                      ORDER BY rd.ExpirationDate ASC";
+              $result = $conn->query($sql);
+              if ($result && $result->num_rows > 0) {
+                  $i = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      $name = $row['Name'] . ', ' . $row['QuantityPerUnit'] . ', ' . $row['Unit'] . ', ' . number_format($row['Price'], 2);
+                      $expiration = date('F j, Y', strtotime($row['ExpirationDate']));
+                      echo '<tr>';
+                      echo '<th scope="row" class="d-none d-md-block">' . $i . '</th>';
+                      echo '<td>' . htmlspecialchars($name) . '</td>';
+                      echo '<td>' . htmlspecialchars($expiration) . '</td>';
+                      echo '<td>' . $row['Count'] . '</td>';
+                      echo '</tr>';
+                      $i++;
+                  }
+              } else {
+                  echo '<tr><td colspan="4" class="text-center">No stocks are near expiration.</td></tr>';
+              }
+            ?>
             </tbody>
           </table>
         </div>
