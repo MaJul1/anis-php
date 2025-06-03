@@ -21,7 +21,7 @@
 
     <div class="d-flex">
       <div class="offcanvas-md offcanvas-start p-3 bg-light position-fixed" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel" style="width: 235px; height: 100vh">
-      <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.html">
+      <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.php">
         <div class="bg-secondary me-3 rounded" style="width: 40px; height: 40px"></div>
         <span class="fs-4 d-md-inline fw-semibold">ANIS</span>
       </a>
@@ -33,19 +33,19 @@
         </a>
       </div>
       <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="product.html">
+        <a class="text-dark text-decoration-none d-flex" href="product.php">
             <i class="bi bi-box me-2"></i>
             Products
         </a>
       </div>
       <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="restock.html">
+        <a class="text-dark text-decoration-none d-flex" href="restock.php">
             <i class="bi bi-box-arrow-in-down me-2"></i>
             Restock
         </a>
       </div>
       <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="stockout.html">
+        <a class="text-dark text-decoration-none d-flex" href="stockout.php">
           <i class="bi bi-box-arrow-up me-2"></i>
           Stock Out
         </a>
