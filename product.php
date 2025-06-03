@@ -114,7 +114,7 @@
      <div class="modal fade" id="read-product" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
-          <div class="modal-header">Sample Product</div>
+          <div class="modal-header fs-3 fw-semibold">Sample Product</div>
           <div class="modal-body">
             <div class="mb-3">
                 <label for="read-product-price" class="label">Product Price</label>
