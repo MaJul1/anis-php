@@ -130,4 +130,114 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // Delete button logic for archived products
+  document.querySelectorAll('#archived-product-table .btn.btn-danger[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      const row = this.closest('tr');
+      const productId = row.getAttribute('data-id');
+      if (!productId) return;
+      if (confirm('Are you sure you want to permanently delete this product? This action cannot be undone.')) {
+        fetch('Persistence/ProductRepository/deleteProduct.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'id=' + encodeURIComponent(productId)
+        })
+        .then(res => res.text())
+        .then(data => {
+          if (data.trim() === 'success') {
+            alert('Product deleted successfully!');
+            location.reload();
+          } else {
+            alert('Failed to delete product.');
+          }
+        });
+      }
+    });
+  });
+
+  // Update modal population
+  const editBtn = document.querySelector('#read-product .btn.btn-primary[data-bs-target="#update-product"]');
+  editBtn && editBtn.addEventListener('click', function () {
+    // Get values from the view modal
+    const name = document.querySelector('#read-product .modal-header').textContent.trim();
+    const price = document.getElementById('read-product-price').value;
+    const unit = document.getElementById('read-product-unit').value;
+    const qpu = document.getElementById('read-product-qpu').value;
+    const expWarn = document.getElementById('read-product-days-until-expiration-warning').value;
+    const stockWarn = document.getElementById('read-product-stock-warning-threshold').value;
+    // Also get the selected product id
+    const selectedRow = Array.from(document.querySelectorAll('#product-table tbody tr')).find(row => row.getAttribute('data-name') === name);
+    const id = selectedRow ? selectedRow.getAttribute('data-id') : '';
+    // Set values in update modal
+    document.getElementById('udpate-product-name').value = name;
+    document.getElementById('udpate-product-price').value = price;
+    document.getElementById('udpate-product-unit').value = unit;
+    document.getElementById('udpate-product-qpu').value = qpu;
+    document.getElementById('udpate-product-days-until-expiration-warning').value = expWarn;
+    document.getElementById('udpate-product-stock-warning-threshold').value = stockWarn;
+    document.getElementById('update-product-id').value = id;
+  });
+
+  // Update product save logic
+  const updateSaveBtn = document.getElementById('update-product-save');
+  if (updateSaveBtn) {
+    updateSaveBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const form = document.getElementById('update-product-form');
+      const formData = new FormData(form);
+      fetch('Persistence/ProductRepository/updateProduct.php', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (data.trim() === 'success') {
+          alert('Product updated successfully!');
+          location.reload();
+        } else {
+          alert('Failed to update product.\n' + data);
+        }
+      });
+    });
+  }
+
+  // Override stock modal: set product id and current stock when opened
+  const overrideStockBtn = document.querySelector('#read-product .btn.btn-primary[data-bs-target="#override-stock"]');
+  overrideStockBtn && overrideStockBtn.addEventListener('click', function () {
+    // Get selected product id, name, and current stock
+    const name = document.querySelector('#read-product .modal-header').textContent.trim();
+    const selectedRow = Array.from(document.querySelectorAll('#product-table tbody tr')).find(row => row.getAttribute('data-name') === name);
+    const id = selectedRow ? selectedRow.getAttribute('data-id') : '';
+    const currentStock = selectedRow ? selectedRow.querySelectorAll('td')[3]?.textContent?.trim() : '';
+    document.getElementById('override-stock-id').value = id;
+    document.getElementById('override-stock-product').value = currentStock;
+    // Set the label to include the product name
+    const overrideLabel = document.getElementById('override-stock-label');
+    if (overrideLabel) {
+      overrideLabel.textContent = `Override ${name} Stock`;
+    }
+  });
+  // Save override stock
+  const overrideStockSaveBtn = document.getElementById('override-stock-save');
+  if (overrideStockSaveBtn) {
+    overrideStockSaveBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const form = document.getElementById('override-stock-form');
+      const formData = new FormData(form);
+      fetch('Persistence/ProductRepository/overrideStock.php', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+      })
+      .then(res => res.text())
+      .then(data => {
+        if (data.trim() === 'success') {
+          alert('Stock overridden successfully!');
+          location.reload();
+        } else {
+          alert('Failed to override stock.');
+        }
+      });
+    });
+  }
 });

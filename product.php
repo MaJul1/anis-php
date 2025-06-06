@@ -72,39 +72,40 @@
             <span class="fs-3 fw-semibold">Update Product</span>
           </div>
           <div class="modal-body">
-            <form action="">
+            <form id="update-product-form">
+              <input type="hidden" id="update-product-id" name="id">
               <div class="mb-3">
                 <label for="udpate-product-name" class="label">Product Name</label>
-                <input type="text" id="udpate-product-name" class="form-control" value="Sample Product 1">
+                <input type="text" id="udpate-product-name" name="name" class="form-control">
               </div>
               <div class="mb-3">
                 <label for="udpate-product-price" class="label">Product Price</label>
-                <input type="number" id="udpate-product-price" class="form-control" value="100">
+                <input type="number" id="udpate-product-price" name="price" class="form-control">
               </div>
               <div class="row">
                 <div class="col-sm mb-3">
                   <label for="udpate-product-unit" class="label">Product Unit</label>
                   <span class="fs-6 text-secondary">Ex. ml, l, roll, pc</span>
-                  <input type="text" id="udpate-product-unit" class="form-control" value="ml">
+                  <input type="text" id="udpate-product-unit" name="unit" class="form-control">
                 </div>
                 <div class="col-sm mb-3">
                   <label for="udpate-product-qpu" class="label">Quantity per Unit</label>
-                  <input type="number" id="udpate-product-qpu" class="form-control" value="500">
+                  <input type="number" id="udpate-product-qpu" name="qpu" class="form-control">
                 </div>
               </div>
               <div class="mb-3">
                 <label for="udpate-product-days-until-expiration-warning" class="label">Expiration Warning Threshold (Days)</label>
-                <input type="number" id="udpate-product-days-until-expiration-warning" class="form-control" value="3">
+                <input type="number" id="udpate-product-days-until-expiration-warning" name="expWarn" class="form-control">
               </div>
               <div class="mb-3">
                 <label for="udpate-product-stock-warning-threshold" class="label">Stock Warning Threshold</label>
-                <input type="number" id="udpate-product-stock-warning-threshold" class="form-control" value="2">
+                <input type="number" id="udpate-product-stock-warning-threshold" name="stockWarn" class="form-control">
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary">Save</button>
-            <button class="btn btn-secondary" data-bs-dismiss="modal" >Cancel</button>
+            <button class="btn btn-primary" id="update-product-save">Save</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
       </div>
@@ -155,16 +156,17 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              Override Stock
+              <span class="fs-3 fw-semibold">Override Stock</span>
             </div>
             <div class="modal-body">
-              <form action="">
-                <label class="form-label" for="override-stock-product">Datu Puti Vinegar Stock</label>
-                <input class="form-control" type="number">
+              <form id="override-stock-form">
+                <label class="form-label" for="override-stock-product" id="override-stock-label">Override Stock</label>
+                <input class="form-control" type="number" id="override-stock-product" name="stock" required>
+                <input type="hidden" id="override-stock-id" name="id">
               </form>
             </div>
             <div class="modal-footer">
-              <button class="btn btn-primary">Save</button>
+              <button class="btn btn-primary" id="override-stock-save">Save</button>
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
           </div>
@@ -205,7 +207,7 @@
                           echo '<td>' . htmlspecialchars($unitSize) . '</td>';
                           echo '<td class="text-center">';
                           echo '<button class="btn btn-primary me-2">Unarchive</button>';
-                          echo '<button class="btn btn-danger">Delete</button>';
+                          echo '<button class="btn btn-danger" data-action="delete">Delete</button>';
                           echo '</td>';
                           echo '</tr>';
                           $i++;
