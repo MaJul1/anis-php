@@ -96,50 +96,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
               </thead>
               <tbody>
                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>July 20, 2025</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-restock">Edit</button>
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>July 20, 2025</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-restock">Edit</button>
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>July 20, 2025</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-restock">Edit</button>
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>July 20, 2025</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-restock">Edit</button>
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                <tr>
                   <td colspan="4" class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-missing-product">Add Missing Product</button></td>
                 </tr>
               </tbody>

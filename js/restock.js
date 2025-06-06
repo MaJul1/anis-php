@@ -154,4 +154,49 @@ document.addEventListener('DOMContentLoaded', function () {
         if (newTbody) tableBody.innerHTML = newTbody.innerHTML;
       });
   }
+
+  // Delegate click event for restock table rows
+  document.querySelectorAll('table.table-striped.table-light.table-hover.table-bordered tbody').forEach(tbody => {
+    tbody.addEventListener('click', function (e) {
+      let row = e.target.closest('tr');
+      if (!row) return;
+      const idInput = row.querySelector('.restock-id');
+      if (!idInput) return;
+      const restockId = idInput.value;
+      fetchRestockDetails(restockId);
+    });
+  });
+
+  function fetchRestockDetails(restockId) {
+    fetch('Persistence/RestockRepository/getRestockDetails.php?id=' + encodeURIComponent(restockId))
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+        // Update modal header with date
+        const modal = document.getElementById('restock-view');
+        const header = modal.querySelector('.modal-header span');
+        const date = new Date(data.createdDate);
+        header.textContent = date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' Restock';
+        // Update table body
+        const tbody = modal.querySelector('tbody');
+        tbody.innerHTML = '';
+        data.details.forEach(detail => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${detail.ProductName}</td>
+            <td>${detail.ExpirationDate ? new Date(detail.ExpirationDate).toLocaleDateString() : ''}</td>
+            <td>${detail.Count}</td>
+            <td class="text-center">
+              <button class="btn btn-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#update-restock">Edit</button>
+              <button class="btn btn-danger btn-sm">Delete</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+        // Add the "Add Missing Product" row
+        const addRow = document.createElement('tr');
+        addRow.innerHTML = `<td colspan="4" class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-missing-product">Add Missing Product</button></td>`;
+        tbody.appendChild(addRow);
+      });
+  }
 });
