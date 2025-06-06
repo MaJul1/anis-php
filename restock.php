@@ -1,3 +1,32 @@
+<?php
+// Add this at the very top of the file, before <!DOCTYPE html>
+if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
+    include_once __DIR__ . '/Persistence/dbconn.php';
+    $sql = "SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
+            FROM Restock r
+            LEFT JOIN RestockDetail rd ON r.Id = rd.RestockId
+            GROUP BY r.Id, r.CreatedDate
+            ORDER BY r.CreatedDate DESC";
+    $result = $conn->query($sql);
+    if ($result && $result->num_rows > 0) {
+        $i = 1;
+        while ($row = $result->fetch_assoc()) {
+            $restockDate = date('F j, Y', strtotime($row['CreatedDate']));
+            echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view">';
+            echo '<input type="hidden" class="restock-id" value="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
+            echo '<th>' . $i . '</th>';
+            echo '<td>' . htmlspecialchars($restockDate) . '</td>';
+            echo '<td>' . $row['ProductCount'] . '</td>';
+            echo '</tr>';
+            $i++;
+        }
+    } else {
+        echo '<tr><td colspan="3" class="text-center">No restocks found.</td></tr>';
+    }
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,64 +39,39 @@
   </head>
   <body>
     <!-- modal-create-restock -->
-    <div class="modal fade" id="create-restock" data-bs-backdrop="static">
-      <div class="modal-dialog modal-xl modal-dialog- modal-dialog-scrollable">
+    <div class="modal fade" id="create-restock" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createRestockLabel" aria-modal="true" role="dialog">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
-            <span class="fs-3 fw-semibold">Create New Restock</span>
+            <span class="fs-3 fw-semibold" id="createRestockLabel">Create New Restock</span>
           </div>
           <div class="modal-body">
-            <table class="table table-striped table-light table-bordered">
-              <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Expiration Date</th>
-                  <th>Restock Count</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <select id="product-select-1" class="form-select"
-                      aria-label="Default select example"></select>
-                  </td>
-                  <td><input type="date" value="2025-07-20"></td>
-                  <td><input type="number" value="20"></td>
-                  <td class="text-center"><button
-                      class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <select id="product-select-2" class="form-select"
-                      aria-label="Default select example"></select>
-                  </td>
-                  <td><input type="date" value="2025-07-20"></td>
-                  <td><input type="number" value="20"></td>
-                  <td class="text-center"><button
-                      class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <select id="product-select-3" class="form-select"
-                      aria-label="Default select example"></select>
-                  </td>
-                  <td><input type="date" value="2025-07-20"></td>
-                  <td><input type="number" value="20"></td>
-                  <td class="text-center"><button
-                      class="btn btn-danger">Delete</button></td>
-                </tr>
-                <tr>
-                  <th colspan="4" class="text-center"><button
-                      class="btn btn-primary">Add New Product</button></th>
-                </tr>
-              </tbody>
-            </table>
+            <form id="create-restock-form" autocomplete="off">
+              <table class="table table-striped table-light table-bordered mb-0">
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Expiration Date</th>
+                    <th>Restock Count</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="restock-product-rows">
+                  <!-- Dynamic rows inserted by JS -->
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="4" class="text-center">
+                      <button type="button" class="btn btn-primary" id="add-restock-row" aria-label="Add new product row">Add New Product</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </form>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary">Create</button>
-            <button class="btn btn-secondary"
-              data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" form="create-restock-form" class="btn btn-primary" id="submit-restock-btn">Create</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Cancel</button>
           </div>
         </div>
       </div>
@@ -273,16 +277,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr data-bs-toggle="modal" data-bs-target="#restock-view">
-                <th>1</th>
-                <td>May 6, 2025</td>
-                <td>6</td>
-              </tr>
-              <tr data-bs-toggle="modal" data-bs-target="#restock-view">
-                <th>2</th>
-                <td>May 9, 2025</td>
-                <td>7</td>
-              </tr>
+              <?php
+              include_once __DIR__ . '/Persistence/dbconn.php';
+              // Fetch all restocks with their id, date, and number of products restocked
+              $sql = "SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
+                      FROM Restock r
+                      LEFT JOIN RestockDetail rd ON r.Id = rd.RestockId
+                      GROUP BY r.Id, r.CreatedDate
+                      ORDER BY r.CreatedDate DESC";
+              $result = $conn->query($sql);
+              if ($result && $result->num_rows > 0) {
+                  $i = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      $restockDate = date('F j, Y', strtotime($row['CreatedDate']));
+                      echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view">';
+                      echo '<input type="hidden" class="restock-id" value="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
+                      echo '<th>' . $i . '</th>';
+                      echo '<td>' . htmlspecialchars($restockDate) . '</td>';
+                      echo '<td>' . $row['ProductCount'] . '</td>';
+                      echo '</tr>';
+                      $i++;
+                  }
+              } else {
+                  echo '<tr><td colspan="3" class="text-center">No restocks found.</td></tr>';
+              }
+              ?>
             </tbody>
           </table>
         </div>
@@ -312,5 +331,6 @@
         populateSelect("product-select-3");
         populateSelect("add-missing-product-select");
       </script>
+      <script src="js/restock.js"></script>
   </body>
 </html>
