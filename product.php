@@ -226,7 +226,7 @@
         </div>
       </div>
 
-    <!-- sidebar -->
+    <!-- sidebar (mobile toggle) -->
     <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
       <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
         <i class="bi bi-list border border-1 border-secondary rounded text-dark fs-2 ps-2 pe-2"></i>
@@ -235,37 +235,37 @@
 
     <div class="d-flex">
       <div class="offcanvas-md offcanvas-start p-3 bg-light position-fixed" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel" style="width: 235px; height: 100vh">
-      <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.html">
-        <div class="bg-secondary me-3 rounded" style="width: 40px; height: 40px"></div>
-        <span class="fs-4 d-md-inline fw-semibold">ANIS</span>
-      </a>
-      <hr />
-      <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="index.html">
-          <i class="bi bi-speedometer2 me-2"></i>
-          Dashboard
+        <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.php">
+          <div class="bg-secondary me-3 rounded" style="width: 40px; height: 40px"></div>
+          <span class="fs-4 d-md-inline fw-semibold">ANIS</span>
         </a>
-      </div>
-      <div class="mb-1 bg-primary p-2 rounded">
-        <a class="text-white text-decoration-none d-flex" href="#">
+        <hr />
+        <div class="mb-1 p-2 rounded">
+          <a class="text-dark text-decoration-none d-flex" href="index.php">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Dashboard
+          </a>
+        </div>
+        <div class="mb-1 bg-primary p-2 rounded">
+          <a class="text-white text-decoration-none d-flex" href="#">
             <i class="bi bi-box me-2"></i>
             Products
-        </a>
-      </div>
-      <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="restock.html">
+          </a>
+        </div>
+        <div class="mb-1 p-2 rounded">
+          <a class="text-dark text-decoration-none d-flex" href="restock.php">
             <i class="bi bi-box-arrow-in-down me-2"></i>
             Restock
-        </a>
+          </a>
+        </div>
+        <div class="mb-1 p-2 rounded">
+          <a class="text-dark text-decoration-none d-flex" href="stockout.php">
+            <i class="bi bi-box-arrow-up me-2"></i>
+            Stock Out
+          </a>
+        </div>
       </div>
-      <div class="mb-1 p-2 rounded">
-        <a class="text-dark text-decoration-none d-flex" href="stockout.html">
-          <i class="bi bi-box-arrow-up me-2"></i>
-          Stock Out
-        </a>
-      </div>
-    </div>
-    <div class="d-none d-md-block" style="min-width: 235px; height: 100vh;"></div>
+      <div class="d-none d-md-block" style="min-width: 235px; height: 100vh;"></div>
 
      <!-- body -->
     <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column">
