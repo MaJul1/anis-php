@@ -167,36 +167,80 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // --- Update Restock Modal Logic ---
+  let lastRestockDetails = [];
+  let lastRestockProducts = [];
+  let lastRestockId = null;
+
+  // When showing restock details, store them for edit
   function fetchRestockDetails(restockId) {
     fetch('Persistence/RestockRepository/getRestockDetails.php?id=' + encodeURIComponent(restockId))
       .then(res => res.json())
       .then(data => {
         if (!data.success) return;
-        // Update modal header with date
-        const modal = document.getElementById('restock-view');
-        const header = modal.querySelector('.modal-header span');
-        const date = new Date(data.createdDate);
-        header.textContent = date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' Restock';
-        // Update table body
-        const tbody = modal.querySelector('tbody');
-        tbody.innerHTML = '';
-        data.details.forEach(detail => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${detail.ProductName}</td>
-            <td>${detail.ExpirationDate ? new Date(detail.ExpirationDate).toLocaleDateString() : ''}</td>
-            <td>${detail.Count}</td>
-            <td class="text-center">
-              <button class="btn btn-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#update-restock">Edit</button>
-              <button class="btn btn-danger btn-sm">Delete</button>
-            </td>
-          `;
-          tbody.appendChild(tr);
-        });
-        // Add the "Add Missing Product" row
-        const addRow = document.createElement('tr');
-        addRow.innerHTML = `<td colspan="4" class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-missing-product">Add Missing Product</button></td>`;
-        tbody.appendChild(addRow);
+        lastRestockId = restockId;
+        lastRestockDetails = data.details;
+        // Get product list for select
+        fetch('Persistence/ProductRepository/getNonArchivedProducts.php')
+          .then(res => res.json())
+          .then(prodData => {
+            lastRestockProducts = prodData.products || [];
+            // Update modal header with date
+            const modal = document.getElementById('restock-view');
+            const header = modal.querySelector('.modal-header span');
+            const date = new Date(data.createdDate);
+            header.textContent = date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) + ' Restock';
+            // Update table body
+            const tbody = modal.querySelector('tbody');
+            tbody.innerHTML = '';
+            data.details.forEach((detail, idx) => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>${detail.ProductName}</td>
+                <td>${detail.ExpirationDate ? new Date(detail.ExpirationDate).toLocaleDateString() : ''}</td>
+                <td>${detail.Count}</td>
+                <td class="text-center">
+                  <button class="btn btn-danger btn-sm" data-delete-idx="${idx}">Delete</button>
+                </td>
+              `;
+              tbody.appendChild(tr);
+            });
+            // Add the "Add Missing Product" row
+            const addRow = document.createElement('tr');
+            addRow.innerHTML = `<td colspan="4" class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-missing-product">Add Missing Product</button></td>`;
+            tbody.appendChild(addRow);
+            // Add event listener for delete buttons after rendering
+            tbody.querySelectorAll('[data-delete-idx]').forEach(btn => {
+              btn.addEventListener('click', function (e) {
+                e.stopPropagation(); // Prevent row click
+                const idx = parseInt(this.getAttribute('data-delete-idx'));
+                const detail = lastRestockDetails[idx];
+                if (!detail) return;
+                if (!confirm('Are you sure you want to delete this restock product?')) return;
+                fetch('Persistence/RestockRepository/deleteRestockProduct.php', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ restock_detail_id: detail.RestockDetailId || detail.Id })
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    if (data.success) {
+                      if (data.deletedRestock) {
+                        // If the whole restock was deleted, close the modal and refresh the table
+                        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('restock-view'));
+                        modal.hide();
+                        window.location.reload(); // Reload the page to update the table
+                      } else {
+                        // Otherwise, just refresh the modal content
+                        if (lastRestockId) fetchRestockDetails(lastRestockId);
+                      }
+                    } else {
+                      alert(data.message || 'Failed to delete restock product.');
+                    }
+                  });
+              });
+            });
+          });
       });
   }
 });

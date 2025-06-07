@@ -108,40 +108,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
       </div>
     </div>
 
-    <!-- modal-update-restock -->
-    <div class="modal fade" id="update-restock" data-bs-backdrop="static">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <span class="fs-3 fw-semibold">Update Restock</span>
-          </div>
-          <div class="modal-body">
-            <form action>
-              <div class="col-md mb-3">
-                <label for="new-product-name">Product Name</label>
-                <input class="form-control" id="new-product-name" type="text"
-                  value="Sample Product 1">
-              </div>
-              <div class="col-md mb-3">
-                <label for="new-expiration-date">Expiration Date</label>
-                <input class="form-control" id="new-expiration-date" type="date"
-                  value="2025-07-24">
-              </div>
-              <div class="col-md mb-3">
-                <label for="new-expiration-date">Product Stock Count</label>
-                <input class="form-control" id="new-expiration-date"
-                  type="number" value="20">
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-primary">Save</button>
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- modal-add-missing-product -->
     <div class="modal fade" id="add-missing-product" data-bs-backdrop="static">
       <div class="modal-dialog modal-lg">

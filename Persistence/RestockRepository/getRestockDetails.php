@@ -8,7 +8,7 @@ if ($restockId <= 0) {
     exit;
 }
 
-$sql = "SELECT r.CreatedDate, p.Name AS ProductName, rd.ExpirationDate, rd.Count
+$sql = "SELECT r.CreatedDate, p.Name AS ProductName, p.Id AS ProductId, rd.ExpirationDate, rd.Count, rd.Id AS RestockDetailId
         FROM Restock r
         JOIN RestockDetail rd ON r.Id = rd.RestockId
         JOIN Product p ON rd.ProductId = p.Id
@@ -29,8 +29,10 @@ $createdDate = $rows[0]['CreatedDate'];
 $details = array_map(function($row) {
     return [
         'ProductName' => $row['ProductName'],
+        'ProductId' => $row['ProductId'],
         'ExpirationDate' => $row['ExpirationDate'],
-        'Count' => $row['Count']
+        'Count' => $row['Count'],
+        'RestockDetailId' => $row['RestockDetailId']
     ];
 }, $rows);
 
