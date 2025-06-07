@@ -85,6 +85,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             <span class="fs-3 fw-semibold">May 10, 2025 Restock</span>
           </div>
           <div class="modal-body">
+            <input type="hidden" id="modal-restock-id" value="">
             <table class="table table-striped table-bordered">
               <thead>
                 <tr>
@@ -212,7 +213,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                   $i = 1;
                   while ($row = $result->fetch_assoc()) {
                       $restockDate = date('F j, Y', strtotime($row['CreatedDate']));
-                      echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view">';
+                      echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view" data-restock-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
                       echo '<input type="hidden" class="restock-id" value="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
                       echo '<th>' . $i . '</th>';
                       echo '<td>' . htmlspecialchars($restockDate) . '</td>';

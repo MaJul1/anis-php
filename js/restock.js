@@ -162,6 +162,9 @@ document.addEventListener('DOMContentLoaded', function () {
       const idInput = row.querySelector('.restock-id');
       if (!idInput) return;
       const restockId = idInput.value;
+      // Set the restock id in the hidden input in the modal
+      const modalRestockIdInput = document.getElementById('modal-restock-id');
+      if (modalRestockIdInput) modalRestockIdInput.value = restockId;
       fetchRestockDetails(restockId);
     });
   });
@@ -241,5 +244,74 @@ document.addEventListener('DOMContentLoaded', function () {
             });
           });
       });
+  }
+
+  // --- Add Missing Product Modal Logic ---
+  const addMissingProductModal = document.getElementById('add-missing-product');
+  if (addMissingProductModal) {
+    addMissingProductModal.addEventListener('show.bs.modal', function () {
+      const select = document.getElementById('add-missing-product-select');
+      select.innerHTML = '<option value="">Select product</option>';
+      fetch('Persistence/ProductRepository/getNonArchivedProducts.php')
+        .then(res => res.json())
+        .then(data => {
+          (data.products || []).forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.ProductID;
+            option.textContent = p.ProductName;
+            select.appendChild(option);
+          });
+        });
+      // Set the restock id for the add-missing-product modal
+      const modalRestockIdInput = document.getElementById('modal-restock-id');
+      addMissingProductModal.setAttribute('data-restock-id', modalRestockIdInput ? modalRestockIdInput.value : '');
+    });
+    // Handle Save button click
+    addMissingProductModal.querySelector('.btn-primary').addEventListener('click', function () {
+      const productId = document.getElementById('add-missing-product-select').value;
+      const expirationDate = document.getElementById('add-missing-product-expiration-date').value;
+      const count = document.getElementById('add-missing-product-count').value;
+      if (!productId) {
+        alert('Please select a product.');
+        return;
+      }
+      if (!expirationDate) {
+        alert('Please enter an expiration date.');
+        return;
+      }
+      if (!count || isNaN(count) || parseInt(count) < 1) {
+        alert('Please enter a valid stock count.');
+        return;
+      }
+      // Get the restock id from the modal's data attribute
+      const restockId = addMissingProductModal.getAttribute('data-restock-id');
+      if (!restockId) {
+        alert('Restock ID not found.');
+        return;
+      }
+      fetch('Persistence/RestockRepository/addMissingProduct.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          restock_id: restockId,
+          product_id: productId,
+          expiration_date: expirationDate,
+          count: count
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            // Close the modal and refresh the restock details
+            const modal = bootstrap.Modal.getOrCreateInstance(addMissingProductModal);
+            modal.hide();
+            // Refresh the restock details modal
+            if (typeof fetchRestockDetails === 'function' && restockId) fetchRestockDetails(restockId);
+            else window.location.reload();
+          } else {
+            alert(data.message || 'Failed to add missing product.');
+          }
+        });
+    });
   }
 });
