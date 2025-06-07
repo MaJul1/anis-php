@@ -118,8 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
           addRestockRow();
           const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('create-restock'));
           modal.hide();
-          // Auto-refresh restock table
-          refreshRestockTable();
+          window.location.reload(); // Reload the page to update the table
         } else {
           // Show error
           alert(data.message || 'Failed to create restock.');
