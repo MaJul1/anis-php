@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- modal-create-restock -->
+    <!-- modal-create-stock-out -->
     <div class="modal fade" id="create-stock-out" data-bs-backdrop="static">
       <div class="modal-dialog modal-xl modal-dialog- modal-dialog-scrollable">
         <div class="modal-content">
@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <!-- modal-view-restock -->
+    <!-- modal-view-stock-out -->
     <div class="modal fade" id="restock-view">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -90,9 +90,6 @@
                   <td>Sample Product 1</td>
                   <td>20</td>
                   <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-stock-out">Edit</button>
                     <button class="btn btn-danger btn-sm"> Delete</button>
                   </td>
                 </tr>
@@ -100,9 +97,6 @@
                   <td>Sample Product 1</td>
                   <td>20</td>
                   <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-stock-out">Edit</button>
                     <button class="btn btn-danger btn-sm"> Delete</button>
                   </td>
                 </tr>
@@ -110,9 +104,6 @@
                   <td>Sample Product 1</td>
                   <td>20</td>
                   <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-stock-out">Edit</button>
                     <button class="btn btn-danger btn-sm"> Delete</button>
                   </td>
                 </tr>
@@ -120,9 +111,6 @@
                   <td>Sample Product 1</td>
                   <td>20</td>
                   <td class="text-center">
-                    <button class="btn btn-primary btn-sm me-1"
-                      data-bs-toggle="modal"
-                      data-bs-target="#update-stock-out">Edit</button>
                     <button class="btn btn-danger btn-sm"> Delete</button>
                   </td>
                 </tr>
@@ -268,29 +256,5 @@
       </div>
     </div>
     </div>
-
-    <script>
-      const products = [
-          { value: "", text: "Select Product" },
-          { value: "1", text: "Sample Product 1" },
-          { value: "2", text: "Sample Product 2" },
-          { value: "3", text: "Sample Product 3" }
-        ];
-
-        function populateSelect(selectId) {
-          const select = document.getElementById(selectId);
-          products.forEach(opt => {
-            const option = document.createElement("option");
-            option.value = opt.value;
-            option.textContent = opt.text;
-            select.appendChild(option);
-          });
-        }
-
-        populateSelect("product-select-1");
-        populateSelect("product-select-2");
-        populateSelect("product-select-3");
-        populateSelect("add-missing-stock-out-select");
-      </script>
 </body>
 </html>
