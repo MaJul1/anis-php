@@ -241,16 +241,29 @@
             </tr>
           </thead>
           <tbody>
-            <tr data-bs-toggle="modal" data-bs-target="#restock-view">
-              <th>1</th>
-              <td>May 6, 2025</td>
-              <td>6</td>
-            </tr>
-            <tr data-bs-toggle="modal" data-bs-target="#restock-view">
-              <th>2</th>
-              <td>May 9, 2025</td>
-              <td>7</td>
-            </tr>
+            <?php
+            include_once __DIR__ . '/Persistence/dbconn.php';
+            $sql = "SELECT s.Id, s.CreatedDate, COUNT(sd.Id) as ProductCount
+                    FROM stockout s
+                    LEFT JOIN stockoutdetail sd ON s.Id = sd.StockOutId
+                    GROUP BY s.Id, s.CreatedDate
+                    ORDER BY s.CreatedDate DESC";
+            $result = $conn->query($sql);
+            if ($result && $result->num_rows > 0) {
+                $i = 1;
+                while ($row = $result->fetch_assoc()) {
+                    $stockOutDate = date('F j, Y', strtotime($row['CreatedDate']));
+                    echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view" data-stockout-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
+                    echo '<th>' . $i . '</th>';
+                    echo '<td>' . htmlspecialchars($stockOutDate) . '</td>';
+                    echo '<td>' . $row['ProductCount'] . '</td>';
+                    echo '</tr>';
+                    $i++;
+                }
+            } else {
+                echo '<tr><td colspan="3" class="text-center">No stock outs found.</td></tr>';
+            }
+            ?>
           </tbody>
         </table>
       </div>
