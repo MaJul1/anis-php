@@ -74,7 +74,7 @@
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <span class="fs-3 fw-semibold">May 10, 2025 Stock Out</span>
+            <span class="fs-3 fw-semibold" id="stockout-modal-title">Stock Out Details</span>
           </div>
           <div class="modal-body">
             <table class="table table-striped table-bordered">
@@ -85,38 +85,8 @@
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Sample Product 1</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                 <tr>
-                  <td>Sample Product 1</td>
-                  <td>20</td>
-                  <td class="text-center">
-                    <button class="btn btn-danger btn-sm"> Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="4" class="text-center"><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-missing-stock-out">Add Missing Product</button></td>
-                </tr>
+              <tbody id="stockout-details-tbody">
+                <!-- Dynamic content will be loaded here -->
               </tbody>
             </table>
           </div>
@@ -170,7 +140,7 @@
                 <select class="form-control" name="missing-stock-out" id="add-missing-stock-out-select"></select>
               </div>
               <div class="col-sm mb-3">
-                <label for="add-missing-stock-out-count">Stock Count</label>
+                <label for="add-missing-stock-out-count">Stock Out Count</label>
                 <input class="form-control" type="number" id="add-missing-stock-out-count">
               </div>
             </form>
@@ -269,5 +239,78 @@
       </div>
     </div>
     </div>
+
+    <!-- Move script to stockout.js -->
+    <script src="js/stockout.js"></script>
+    <script>
+function populateMissingProductSelect(stockoutId) {
+  // Fetch products not yet in this stockout
+  fetch('Persistence/StockOutRepository/getMissingProducts.php?stockout_id=' + encodeURIComponent(stockoutId))
+    .then(response => response.json())
+    .then(data => {
+      const select = document.getElementById('add-missing-stock-out-select');
+      select.innerHTML = '';
+      if (Array.isArray(data) && data.length > 0) {
+        data.forEach(product => {
+          const option = document.createElement('option');
+          option.value = product.Id;
+          option.textContent = product.Name;
+          select.appendChild(option);
+        });
+      } else {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'No products available';
+        select.appendChild(option);
+      }
+    });
+}
+
+let currentStockoutId = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('tr[data-stockout-id]').forEach(function(row) {
+    row.addEventListener('click', function() {
+      currentStockoutId = this.getAttribute('data-stockout-id');
+    });
+  });
+
+  // Listen for Add Missing Product modal show
+  const addMissingModal = document.getElementById('add-missing-stock-out');
+  addMissingModal.addEventListener('show.bs.modal', function() {
+    if (currentStockoutId) {
+      populateMissingProductSelect(currentStockoutId);
+    }
+  });
+
+  // Handle Save button
+  document.querySelector('#add-missing-stock-out .btn-primary').addEventListener('click', function(e) {
+    e.preventDefault();
+    const productId = document.getElementById('add-missing-stock-out-select').value;
+    const count = document.getElementById('add-missing-stock-out-count').value;
+    if (!productId || !count || !currentStockoutId) return;
+    fetch('Persistence/StockOutRepository/addMissingProduct.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        stockout_id: currentStockoutId,
+        product_id: productId,
+        count: count
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Hide modal and refresh details
+        const modal = bootstrap.Modal.getOrCreateInstance(addMissingModal);
+        modal.hide();
+        document.querySelector('tr[data-stockout-id="' + currentStockoutId + '"]').click();
+      } else {
+        alert(data.error || 'Failed to add product');
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>
