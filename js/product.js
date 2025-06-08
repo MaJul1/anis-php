@@ -240,4 +240,45 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+
+  // Simple table sort for #product-table
+  (function() {
+    const table = document.getElementById('product-table');
+    if (!table) return;
+    const ths = table.querySelectorAll('thead th');
+    let sortCol = null;
+    let sortAsc = true;
+
+    ths.forEach((th, idx) => {
+      th.style.cursor = 'pointer';
+      th.addEventListener('click', function() {
+        if (sortCol === idx) {
+          sortAsc = !sortAsc;
+        } else {
+          sortCol = idx;
+          sortAsc = true;
+        }
+        sortTable(idx, sortAsc);
+        ths.forEach(t => t.classList.remove('table-primary'));
+        th.classList.add('table-primary');
+      });
+    });
+
+    function sortTable(col, asc) {
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      rows.sort((a, b) => {
+        let aText = a.children[col].textContent.trim();
+        let bText = b.children[col].textContent.trim();
+        // Try to compare as numbers if possible
+        let aNum = parseFloat(aText.replace(/[^\d.\-]/g, ''));
+        let bNum = parseFloat(bText.replace(/[^\d.\-]/g, ''));
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return asc ? aNum - bNum : bNum - aNum;
+        }
+        return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+      });
+      rows.forEach(row => tbody.appendChild(row));
+    }
+  })();
 });

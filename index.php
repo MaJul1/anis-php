@@ -94,7 +94,7 @@
             </table>
           </div>
           <div class="d-flex justify-content-end">
-            <a class="btn btn-primary" href="restock.html">Restock Products</a>
+            <a class="btn btn-primary" href="restock.php">Restock Products</a>
           </div>
         </div>
         <div class="border border-1 border-opacity-25 border-dark rounded p-2">
