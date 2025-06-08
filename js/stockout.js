@@ -141,3 +141,118 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// --- Dynamic Stock Out Modal Logic ---
+const stockoutRows = document.getElementById('stockout-product-rows');
+const addRowBtn = document.getElementById('add-stockout-row');
+const form = document.getElementById('create-stock-out-form');
+const submitBtn = document.getElementById('submit-stockout-btn');
+let productOptions = [];
+
+// Fetch products for dropdown
+fetch('Persistence/StockOutRepository/getAllProducts.php')
+  .then(res => res.json())
+  .then(data => {
+    productOptions = data || [];
+    addStockOutRow(); // Add initial row
+  });
+
+// Add new row
+function addStockOutRow() {
+  const row = document.createElement('tr');
+  row.innerHTML = `
+    <td>
+      <select class="form-select product-select" required aria-label="Product Name">
+        <option value="">Select product</option>
+        ${productOptions.map(p => `<option value="${p.Id}">${p.Name}</option>`).join('')}
+      </select>
+      <div class="invalid-feedback"></div>
+    </td>
+    <td>
+      <input type="number" class="form-control stockout-count" min="1" required aria-label="Stock Out Count">
+      <div class="invalid-feedback"></div>
+    </td>
+    <td>
+      <button type="button" class="btn btn-danger remove-row-btn" aria-label="Remove row">&times;</button>
+    </td>
+  `;
+  stockoutRows.appendChild(row);
+  row.querySelector('.remove-row-btn').onclick = () => {
+    row.remove();
+    if (stockoutRows.children.length === 0) addStockOutRow();
+  };
+}
+
+addRowBtn.addEventListener('click', addStockOutRow);
+
+// Form validation
+function validateStockOutForm() {
+  let valid = true;
+  Array.from(stockoutRows.children).forEach(row => {
+    // Product
+    const product = row.querySelector('.product-select');
+    const productFeedback = product.nextElementSibling;
+    if (!product.value) {
+      product.classList.add('is-invalid');
+      productFeedback.textContent = 'Please select a product.';
+      valid = false;
+    } else {
+      product.classList.remove('is-invalid');
+      productFeedback.textContent = '';
+    }
+    // Count
+    const count = row.querySelector('.stockout-count');
+    const countFeedback = count.nextElementSibling;
+    if (!count.value || isNaN(count.value) || parseInt(count.value) < 1) {
+      count.classList.add('is-invalid');
+      countFeedback.textContent = 'Enter a positive number.';
+      valid = false;
+    } else {
+      count.classList.remove('is-invalid');
+      countFeedback.textContent = '';
+    }
+  });
+  return valid;
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (!validateStockOutForm()) return;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating...';
+  const stockoutData = Array.from(stockoutRows.children).map(row => ({
+    product_id: row.querySelector('.product-select').value,
+    count: row.querySelector('.stockout-count').value
+  }));
+  fetch('Persistence/StockOutRepository/createStockOut.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ products: stockoutData })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        // Success: reset form, close modal, refresh stockout table
+        form.reset();
+        stockoutRows.innerHTML = '';
+        addStockOutRow();
+        const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('create-stock-out'));
+        modal.hide();
+        window.location.reload();
+      } else {
+        alert(data.error || 'Failed to create stock out.');
+      }
+    })
+    .catch(() => alert('Server error.'))
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create';
+    });
+});
+
+form.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    submitBtn.click();
+  }
+});
