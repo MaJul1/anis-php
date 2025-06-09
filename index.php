@@ -56,6 +56,70 @@
       <!-- body -->
       <div class="container ms-lg-4 p-md-5 pt-3 d-flex flex-column">
         <span class="fs-1 fw-bold mb-3">Dashboard</span>
+        <div class="row row-gap-3 mb-3">
+          <div class="col-xl-3 col-6">
+            <a href="product.php" class="text-decoration-none text-dark">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-success rounded-3 bg-opacity-50 h-100">
+                <span class="fs-3 fw-bold">Total Products</span>
+                <span class="fs-1 fw-bold text-dark">
+                  <?php
+                  include_once __DIR__ . '/Persistence/dbconn.php';
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE Archived = FALSE");
+                  $row = $result->fetch_assoc();
+                  echo $row['total'];
+                  ?>
+                </span>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-6">
+            <a href="restock.php" class="text-decoration-none text-dark">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-info rounded-3 bg-opacity-50 h-100">
+                <span class="fs-3 fw-bold">Total Restocks</span>
+                <span class="fs-1 fw-bold text-dark">
+                  <?php
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM Restock");
+                  $row = $result->fetch_assoc();
+                  echo $row['total'];
+                  ?>
+                </span>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-6">
+            <a href="stockout.php" class="text-decoration-none text-dark">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-warning rounded-3 bg-opacity-50 h-100">
+                <span class="fs-3 fw-bold">Total Stock Outs</span>
+                <span class="fs-1 fw-bold text-dark">
+                  <?php
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM StockOut");
+                  $row = $result->fetch_assoc();
+                  echo $row['total'];
+                  ?>
+                </span>
+              </div>
+            </a>
+          </div>
+          <div class="col-xl-3 col-6">
+            <a href="#" class="text-decoration-none text-dark" onclick="window.scrollTo({top: document.querySelector('.border.border-1.border-opacity-25.border-dark.rounded.p-2').offsetTop - 30, behavior: 'smooth'}); return false;">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-danger rounded-3 bg-opacity-50 h-100">
+                <span class="fs-3 fw-bold">Total Warnings</span>
+                <span class="fs-1 fw-bold text-dark">
+                  <?php
+                  // Out of stock warnings
+                  $result1 = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE");
+                  $row1 = $result1->fetch_assoc();
+                  // Expired/near expired warnings
+                  $today = date('Y-m-d');
+                  $result2 = $conn->query("SELECT COUNT(*) AS total FROM RestockDetail rd INNER JOIN Product p ON rd.ProductId = p.Id WHERE rd.ExpirationDate IS NOT NULL AND rd.IsExpiredChecked = FALSE AND p.Archived = FALSE AND rd.ExpirationDate <= DATE_ADD('$today', INTERVAL p.ExpirationWarningThreshold DAY) AND rd.ExpirationDate >= '$today'");
+                  $row2 = $result2->fetch_assoc();
+                  echo ($row1['total'] + $row2['total']);
+                  ?>
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
         <div
           class="border border-1 border-opacity-25 border-dark rounded p-2 mb-4">
           <span class="fs-4 fw-semibold">Out of Stock Warning</span>
@@ -71,8 +135,6 @@
               </thead>
               <tbody>
               <?php
-                include_once __DIR__ . '/Persistence/dbconn.php';
-
                 $sql = "SELECT Name, QuantityPerUnit, Unit, Price, CurrentStockNumber FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE";
                 $result = $conn->query($sql);
                 if ($result && $result->num_rows > 0) {
