@@ -128,7 +128,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                   <input class="form-control" type="date" id="add-missing-product-expiration-date">
                 </div>
                 <div class="col-sm mb-3">
-                  <label class="for="add-missing-product-count">Stock Count</label>
+                  <label class="form-label" for="add-missing-product-count">Stock Count</label>
                   <input class="form-control" type="number" id="add-missing-product-count">
                 </div>
               </div>
@@ -180,7 +180,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             Stock Out
           </a>
         </div>
-        <hr class="m-0">
+        <hr class="mb-1">
         <a href="#" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
           <i class="bi bi-person-circle fs-1 me-3"></i>
           Hello Majul
