@@ -64,24 +64,25 @@ document.addEventListener('DOMContentLoaded', function() {
           <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             table { border-collapse: collapse; width: 100%; }
-            th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+            th, td { border: 1px solid #333; padding: 4px; text-align: left; }
             th { background: #eee; }
-            .box { width: 30px; height: 30px; border: 1px solid #333; display: inline-block; }
+            .box { width: 10px; height: 10px; border: 1px solid #333; display: block; margin: 0 auto; }
           </style>
         </head>
         <body>
           <h2>Expired/Near Expired Stocks Checklist</h2>
           <table>
             <thead>
-              <tr><th>Name</th><th>Restock Count</th><th>Box</th></tr>
+              <tr><th>Name</th><th>Expiration Date</th><th>Restock Count</th><th>Box</th></tr>
             </thead>
             <tbody>
       `;
       rows.forEach(row => {
         const tds = row.querySelectorAll('td');
         const name = tds[0]?.textContent.trim() || '';
+        const expiration = tds[1]?.textContent.trim() || '';
         const count = tds[2]?.textContent.trim() || '';
-        html += `<tr><td>${name}</td><td>${count}</td><td><div class='box'></div></td></tr>`;
+        html += `<tr><td>${name}</td><td>${expiration}</td><td>${count}</td><td><div class='box'></div></td></tr>`;
       });
       html += `</tbody></table></body></html>`;
       // Open print window
