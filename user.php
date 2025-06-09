@@ -36,7 +36,7 @@
           </a>
         </div>
         <div class="mb-1 p-2 rounded">
-          <a class="text-dark text-decoration-none d-flex" href="#">
+          <a class="text-dark text-decoration-none d-flex" href="restock.php">
             <i class="bi bi-box-arrow-in-down me-2"></i>
             Restock
           </a>
@@ -65,13 +65,11 @@
         </div>
         <span>Password</span>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" aria-label="Password of the User" aria-describedby="password-input" value="SamplePassword" disabled>
+          <input type="password" class="form-control" aria-label="Password of the User" aria-describedby="password-input" value="SamplePassword" disabled>
           <a class="btn btn-outline-secondary" type="button" id="password-input"><i class="bi bi-pencil-square"></i></a>
         </div>
-        <div>
-          <button class="btn btn-primary w-100 mb-3">Logout</button>
-          <button class="btn btn-danger w-100">Delete Account</button>
-        </div>
+        <button class="btn btn-primary w-100 mb-3">Logout</button>
+        <button class="btn btn-danger w-100">Delete Account</button>
       </div>
     </div>
 </body>

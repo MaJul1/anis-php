@@ -265,7 +265,7 @@
           </a>
         </div>
         <hr class="mb-1">
-        <a href="#" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
+        <a href="user.php" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
           <i class="bi bi-person-circle fs-1 me-3"></i>
           Hello Majul
         </a>
