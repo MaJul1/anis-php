@@ -64,9 +64,9 @@
         <div class="row row-gap-3 mb-3">
           <div class="col-xl-3 col-6">
             <a href="product.php" class="text-decoration-none text-dark">
-              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-success rounded-3 bg-opacity-50 h-100">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-success rounded-3 text-white h-100">
                 <span class="fs-3 fw-bold">Total Products</span>
-                <span class="fs-1 fw-bold text-dark">
+                <span class="fs-1 fw-bold">
                   <?php
                   include_once __DIR__ . '/Persistence/dbconn.php';
                   $result = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE Archived = FALSE");
@@ -79,9 +79,9 @@
           </div>
           <div class="col-xl-3 col-6">
             <a href="restock.php" class="text-decoration-none text-dark">
-              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-info rounded-3 bg-opacity-50 h-100">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-info rounded-3 text-white h-100">
                 <span class="fs-3 fw-bold">Total Restocks</span>
-                <span class="fs-1 fw-bold text-dark">
+                <span class="fs-1 fw-bold">
                   <?php
                   $result = $conn->query("SELECT COUNT(*) AS total FROM Restock");
                   $row = $result->fetch_assoc();
@@ -92,10 +92,10 @@
             </a>
           </div>
           <div class="col-xl-3 col-6">
-            <a href="stockout.php" class="text-decoration-none text-dark">
-              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-warning rounded-3 bg-opacity-50 h-100">
+            <a href="stockout.php" class="text-decoration-none text-white">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-warning rounded-3 h-100">
                 <span class="fs-3 fw-bold">Total Stock Outs</span>
-                <span class="fs-1 fw-bold text-dark">
+                <span class="fs-1 fw-bold">
                   <?php
                   $result = $conn->query("SELECT COUNT(*) AS total FROM StockOut");
                   $row = $result->fetch_assoc();
@@ -106,10 +106,10 @@
             </a>
           </div>
           <div class="col-xl-3 col-6">
-            <a href="#" class="text-decoration-none text-dark" onclick="window.scrollTo({top: document.querySelector('.border.border-1.border-opacity-25.border-dark.rounded.p-2').offsetTop - 30, behavior: 'smooth'}); return false;">
-              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-danger rounded-3 bg-opacity-50 h-100">
+            <a href="#" class="text-decoration-none text-white" onclick="window.scrollTo({top: document.querySelector('.border.border-1.border-opacity-25.border-dark.rounded.p-2').offsetTop - 30, behavior: 'smooth'}); return false;">
+              <div class="d-flex flex-column align-items-end border border-1 p-3 bg-danger rounded-3 h-100">
                 <span class="fs-3 fw-bold">Total Warnings</span>
-                <span class="fs-1 fw-bold text-dark">
+                <span class="fs-1 fw-bold">
                   <?php
                   // Out of stock warnings
                   $result1 = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE");
