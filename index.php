@@ -130,7 +130,7 @@
           <span class="fs-4 fw-semibold">Out of Stock Warning</span>
           <div class="table-responsive mt-4" style="max-height: 400px">
             <table
-              class="table table-striped table-bordered align-middle table-hover table-light">
+              class="table table-striped table-bordered align-middle table-light">
               <thead class="table-light">
                 <tr>
                   <th scope="col" class="d-none d-md-block">#</th>
@@ -168,7 +168,7 @@
           <span class="fs-4 fw-semibold">Expired Stocks Warning</span>
           <div class="table-responsive mt-4" style="max-height: 350px">
             <table
-              class="table table-striped table-bordered align-middle table-hover table-light">
+              class="table table-striped table-bordered align-middle table-light">
               <thead class="table-light">
                 <tr>
                   <th scope="col" class="d-none d-md-block">#</th>

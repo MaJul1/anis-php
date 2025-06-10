@@ -235,30 +235,6 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         </div>
       </div>
     </div>
-
-    <script>
-      const products = [
-          { value: "", text: "Select Product" },
-          { value: "1", text: "Sample Product 1" },
-          { value: "2", text: "Sample Product 2" },
-          { value: "3", text: "Sample Product 3" }
-        ];
-
-        function populateSelect(selectId) {
-          const select = document.getElementById(selectId);
-          products.forEach(opt => {
-            const option = document.createElement("option");
-            option.value = opt.value;
-            option.textContent = opt.text;
-            select.appendChild(option);
-          });
-        }
-
-        populateSelect("product-select-1");
-        populateSelect("product-select-2");
-        populateSelect("product-select-3");
-        populateSelect("add-missing-product-select");
-      </script>
       <script src="js/restock.js"></script>
   </body>
 </html>
