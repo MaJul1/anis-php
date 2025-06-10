@@ -188,6 +188,17 @@ addRowBtn.addEventListener('click', addStockOutRow);
 // Form validation
 function validateStockOutForm() {
   let valid = true;
+  // Collect selected products and count occurrences
+  const selectedProducts = [];
+  Array.from(stockoutRows.children).forEach(row => {
+    const product = row.querySelector('.product-select');
+    if (product.value) {
+      selectedProducts.push(product.value);
+    }
+  });
+  // Find duplicates
+  const duplicates = selectedProducts.filter((item, idx, arr) => arr.indexOf(item) !== idx);
+
   Array.from(stockoutRows.children).forEach(row => {
     // Product
     const product = row.querySelector('.product-select');
@@ -195,6 +206,10 @@ function validateStockOutForm() {
     if (!product.value) {
       product.classList.add('is-invalid');
       productFeedback.textContent = 'Please select a product.';
+      valid = false;
+    } else if (duplicates.includes(product.value)) {
+      product.classList.add('is-invalid');
+      productFeedback.textContent = 'Duplicate product selected.';
       valid = false;
     } else {
       product.classList.remove('is-invalid');
