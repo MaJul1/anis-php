@@ -9,6 +9,59 @@
   <script src="bootsrap/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+  <!-- modal-for-updating-username -->
+   <div class="modal fade" id="update-username">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <span class="fs-3 fw-semibold">Update Username</span>
+        </div>
+        <form action="update-username.php">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="username">New Username</label>
+              <input type="text" class="form-control">
+            </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <a class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+            </div>
+        </form>
+      </div>
+    </div>
+   </div>
+
+   <!-- modal for updating password -->
+    <div class="modal fade" id="update-password">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <span class="fs-3 fw-semibold">Update Password</span>
+          </div>
+          <form action="update-password.php">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" class="form-control">
+              </div>
+              <div class="mb-3">
+                <label for="retype-password">Retype Password</label>
+                <input type="password" id="retype-password" class="form-control">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <a class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   <!-- sidebar -->
   <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
       <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
@@ -61,12 +114,12 @@
         <span>Username</span>
         <div class="input-group mb-3">
           <input type="text" class="form-control" aria-label="Username of the User" aria-describedby="username-input" value="MaJul" disabled>
-          <a class="btn btn-outline-secondary" type="button" id="username-input"><i class="bi bi-pencil-square"></i></a>
+          <a class="btn btn-outline-secondary" type="button" id="username-input" data-bs-toggle="modal" href="#update-username"><i class="bi bi-pencil-square"></i></a>
         </div>
         <span>Password</span>
         <div class="input-group mb-3">
           <input type="password" class="form-control" aria-label="Password of the User" aria-describedby="password-input" value="SamplePassword" disabled>
-          <a class="btn btn-outline-secondary" type="button" id="password-input"><i class="bi bi-pencil-square"></i></a>
+          <a class="btn btn-outline-secondary" type="button" id="password-input" data-bs-toggle="modal" href="#update-password"><i class="bi bi-pencil-square"></i></a>
         </div>
         <button class="btn btn-primary w-100 mb-3">Logout</button>
         <button class="btn btn-danger w-100">Delete Account</button>
