@@ -242,6 +242,8 @@ document.addEventListener('DOMContentLoaded', function () {
                   });
               });
             });
+            // After updating the table, re-attach the print button logic
+            setupRestockPrintButton();
           });
       });
   }
@@ -267,51 +269,108 @@ document.addEventListener('DOMContentLoaded', function () {
       addMissingProductModal.setAttribute('data-restock-id', modalRestockIdInput ? modalRestockIdInput.value : '');
     });
     // Handle Save button click
-    addMissingProductModal.querySelector('.btn-primary').addEventListener('click', function () {
+    const addMissingProductForm = document.getElementById('add-missing-product-form');
+    addMissingProductForm.addEventListener('submit', function (e) {
+      e.preventDefault();
       const productId = document.getElementById('add-missing-product-select').value;
-      const expirationDate = document.getElementById('add-missing-product-expiration-date').value;
-      const count = document.getElementById('add-missing-product-count').value;
       if (!productId) {
-        alert('Please select a product.');
+        alert('Select a product to add.');
         return;
       }
-      if (!expirationDate) {
-        alert('Please enter an expiration date.');
-        return;
-      }
-      if (!count || isNaN(count) || parseInt(count) < 1) {
-        alert('Please enter a valid stock count.');
-        return;
-      }
-      // Get the restock id from the modal's data attribute
       const restockId = addMissingProductModal.getAttribute('data-restock-id');
-      if (!restockId) {
-        alert('Restock ID not found.');
-        return;
-      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Adding...';
       fetch('Persistence/RestockRepository/addMissingProduct.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          restock_id: restockId,
-          product_id: productId,
-          expiration_date: expirationDate,
-          count: count
-        })
+        body: JSON.stringify({ restock_id: restockId, product_id: productId })
       })
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            // Close the modal and refresh the restock details
+            // Close modal and refresh restock details
             const modal = bootstrap.Modal.getOrCreateInstance(addMissingProductModal);
             modal.hide();
-            // Refresh the restock details modal
-            if (typeof fetchRestockDetails === 'function' && restockId) fetchRestockDetails(restockId);
-            else window.location.reload();
+            if (lastRestockId) fetchRestockDetails(lastRestockId);
           } else {
-            alert(data.message || 'Failed to add missing product.');
+            alert(data.message || 'Failed to add product.');
           }
+        })
+        .catch(() => alert('Server error.'))
+        .finally(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Save';
         });
     });
+  }
+
+  // --- Print Restock Details Logic ---
+  function setupRestockPrintButton() {
+    const modal = document.getElementById('restock-view');
+    if (!modal) return;
+    const table = modal.querySelector('table');
+    if (!table) return;
+    const printBtn = modal.querySelector('.btn-print-restock');
+    if (!printBtn || !printBtn.parentNode) return;
+    const newPrintBtn = printBtn.cloneNode(true);
+    printBtn.parentNode.replaceChild(newPrintBtn, printBtn);
+    newPrintBtn.addEventListener('click', function() {
+      const title = modal.querySelector('.fs-3.fw-semibold')?.textContent || 'Restock Details';
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      // Only print rows with at least 3 columns and skip the Add Missing Product row
+      const printableRows = rows.filter(row => row.querySelectorAll('td').length >= 3);
+      if (printableRows.length === 0) {
+        alert('No restock details to print.');
+        return;
+      }
+      let html = `
+        <html>
+        <head>
+          <title>Restock Details</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #333; padding: 4px; text-align: left; }
+            th { background: #eee; }
+          </style>
+        </head>
+        <body>
+          <h2>${title}</h2>
+          <table>
+            <thead>
+              <tr><th>Product Name</th><th>Expiration Date</th><th>Product Stock Count</th></tr>
+            </thead>
+            <tbody>
+      `;
+      printableRows.forEach(row => {
+        const tds = row.querySelectorAll('td');
+        const name = tds[0]?.textContent.trim() || '';
+        const expiration = tds[1]?.textContent.trim() || '';
+        const count = tds[2]?.textContent.trim() || '';
+        html += `<tr><td>${name}</td><td>${expiration}</td><td>${count}</td></tr>`;
+      });
+      html += `</tbody></table></body></html>`;
+      const printWindow = window.open('', '', 'width=800,height=600');
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    });
+  }
+
+  // Attach print logic every time the modal is shown
+  (function() {
+    document.addEventListener('shown.bs.modal', function(e) {
+      if (e.target && e.target.id === 'restock-view') {
+        setupRestockPrintButton();
+      }
+    });
+  })();
+
+  // Initial setup: add row and fetch restock details if editing
+  addRestockRow();
+  const initialRestockId = document.getElementById('modal-restock-id')?.value;
+  if (initialRestockId) {
+    fetchRestockDetails(initialRestockId);
   }
 });

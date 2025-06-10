@@ -271,3 +271,57 @@ form.addEventListener('keydown', function (e) {
     submitBtn.click();
   }
 });
+
+// Print Stock Out Details functionality
+(function() {
+  document.addEventListener('shown.bs.modal', function(e) {
+    if (e.target && e.target.id === 'restock-view') {
+      const printBtn = document.querySelector('#restock-view .btn.btn-secondary');
+      const table = document.querySelector('#restock-view table');
+      if (!printBtn || !table) return;
+      // Remove previous click listeners to avoid stacking
+      printBtn.replaceWith(printBtn.cloneNode(true));
+      const newPrintBtn = document.querySelector('#restock-view .btn.btn-secondary');
+      newPrintBtn.addEventListener('click', function() {
+        const title = document.getElementById('stockout-modal-title')?.textContent || 'Stock Out Details';
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+        if (rows.length === 0) {
+          alert('No stock out details to print.');
+          return;
+        }
+        let html = `
+          <html>
+          <head>
+            <title>Stock Out Details</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 40px; }
+              table { border-collapse: collapse; width: 100%; }
+              th, td { border: 1px solid #333; padding: 4px; text-align: left; }
+              th { background: #eee; }
+            </style>
+          </head>
+          <body>
+            <h2>${title}</h2>
+            <table>
+              <thead>
+                <tr><th>Product Name</th><th>Product Stock Count</th></tr>
+              </thead>
+              <tbody>
+        `;
+        rows.forEach(row => {
+          const tds = row.querySelectorAll('td');
+          if (tds.length < 2) return;
+          const name = tds[0]?.textContent.trim() || '';
+          const count = tds[1]?.textContent.trim() || '';
+          html += `<tr><td>${name}</td><td>${count}</td></tr>`;
+        });
+        html += `</tbody></table></body></html>`;
+        const printWindow = window.open('', '', 'width=800,height=600');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+      });
+    }
+  });
+})();

@@ -69,7 +69,8 @@
             </table>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-secondary">Print</button>
+            <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -225,6 +226,5 @@
 
     <!-- Move script to stockout.js -->
     <script src="js/stockout.js"></script>
-    <!-- All inline scripts have been moved to js/stockout.js -->
   </body>
 </html>
