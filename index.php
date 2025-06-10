@@ -145,7 +145,7 @@
                 if ($result && $result->num_rows > 0) {
                     $i = 1;
                     while ($row = $result->fetch_assoc()) {
-                        $name = $row['Name'] . ', ' . $row['QuantityPerUnit'] . ', ' . $row['Unit'] . ', ' . number_format($row['Price'], 2);
+                        $name = $row['Name'] . ', ' . $row['QuantityPerUnit'] . ' ' . $row['Unit'] . ', ' . number_format($row['Price'], 2);
                         echo '<tr>';
                         echo '<th scope="row" class="d-none d-md-block">' . $i . '</th>';
                         echo '<td>' . htmlspecialchars($name) . '</td>';
