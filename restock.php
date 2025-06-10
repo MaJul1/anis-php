@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+  header('Location: login.php');
+  exit;
+}
 // Add this at the very top of the file, before <!DOCTYPE html>
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     include_once __DIR__ . '/Persistence/dbconn.php';
@@ -200,7 +205,10 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         </div>
       </div>
     </div>
-      <script>window.activeSidebar = 'restock';</script>
+      <script>
+        window.activeSidebar = 'restock';
+        window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
+      </script>
       <script src="js/sidebar.js"></script>
       <script src="js/restock.js"></script>
   </body>

@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <hr class="mb-1">
       <a href="user.php" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
         <i class="bi bi-person-circle fs-1 me-3"></i>
-        Hello Majul
+        <span id="sidebar-username">Hello</span>
       </a>
     </div>
     <div class="d-none d-md-block" style="min-width: 235px; height: 100vh;"></div>
@@ -51,5 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const sidebarContainer = document.getElementById('sidebar');
   if (sidebarContainer) {
     sidebarContainer.innerHTML = sidebarHTML;
+  }
+  const username = window.sidebarUsername || null;
+  if (username) {
+    const userElem = document.getElementById('sidebar-username');
+    if (userElem) userElem.textContent = `Hello ${username}`;
   }
 });

@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+  header('Location: login.php');
+  exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -187,7 +195,10 @@
       </div>
     </div>
     </div>
-    <script>window.activeSidebar = 'stockout';</script>
+    <script>
+      window.activeSidebar = 'stockout';
+      window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
+    </script>
     <script src="js/sidebar.js"></script>
     <!-- Move script to stockout.js -->
     <script src="js/stockout.js"></script>

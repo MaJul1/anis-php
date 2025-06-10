@@ -1,3 +1,41 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit();
+}
+require_once __DIR__ . '/Persistence/dbconn.php';
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    if ($username === '' || $password === '') {
+        $error = 'Username and password required.';
+    } else {
+        $stmt = $conn->prepare('SELECT Id, Password, IsDeleted FROM `User` WHERE Username = ? LIMIT 1');
+        $stmt->bind_param('s', $username);
+        $stmt->execute();
+        $stmt->store_result();
+        if ($stmt->num_rows === 0) {
+            $error = 'Invalid username or password.';
+        } else {
+            $stmt->bind_result($userId, $hash, $isDeleted);
+            $stmt->fetch();
+            if ($isDeleted) {
+                $error = 'Account is deleted.';
+            } elseif (!password_verify($password, $hash)) {
+                $error = 'Invalid username or password.';
+            } else {
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['username'] = $username;
+                header('Location: index.php');
+                exit();
+            }
+        }
+        $stmt->close();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +62,11 @@
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
+        <?php if ($error): ?>
+          <div class="alert alert-danger" role="alert">
+            <?= htmlspecialchars($error) ?>
+          </div>
+        <?php endif; ?>
         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
         <a href="register.php" class="btn btn-secondary w-100">Register</a>
       </form>

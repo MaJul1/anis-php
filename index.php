@@ -1,3 +1,15 @@
+<?php
+
+  session_start();
+  $id = $_SESSION["user_id"];
+  if($id === null)
+  {
+    header("location: login.php");
+    exit;
+  }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -181,7 +193,10 @@
         </div>
       </div>
     </div>
-    <script>window.activeSidebar = 'dashboard';</script>
+    <script>
+      window.activeSidebar = 'dashboard';
+      window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
+    </script>
     <script src="js/sidebar.js"></script>
     <script src="js/dashboard.js"></script>
   </body>

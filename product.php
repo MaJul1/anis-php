@@ -1,3 +1,13 @@
+<?php
+  session_start();
+  $userId = $_SESSION["user_id"];
+  if($userId === null)
+  {
+    header("location: login.php");
+    exit;
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -297,24 +307,27 @@
         </div>
       </div>
     </div>
-    <script>window.activeSidebar = 'product';</script>
+    <script>
+      window.activeSidebar = 'product';
+      window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
+    </script>
     <script src="js/sidebar.js"></script>
-  <script>
-  const productNames = [
-    <?php
-      include_once __DIR__ . '/Persistence/dbconn.php';
-      $query = "SELECT Name FROM Product;";
-      $result = $conn->query($query);
-      if ($result && $result->num_rows > 0) {
-        $names = [];
-        while($row = $result->fetch_assoc()) {
-          $names[] = '"' . addslashes($row['Name']) . '"';
+    <script>
+    const productNames = [
+      <?php
+        include_once __DIR__ . '/Persistence/dbconn.php';
+        $query = "SELECT Name FROM Product;";
+        $result = $conn->query($query);
+        if ($result && $result->num_rows > 0) {
+          $names = [];
+          while($row = $result->fetch_assoc()) {
+            $names[] = '"' . addslashes($row['Name']) . '"';
+          }
+          echo implode(',', $names);
         }
-        echo implode(',', $names);
-      }
-    ?>
-  ];
-  </script>
-  <script src="js/product.js"></script>
+      ?>
+    ];
+    </script>
+    <script src="js/product.js"></script>
   </body>
 </html>

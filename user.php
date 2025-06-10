@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+  header('Location: login.php');
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,17 +24,17 @@
         <div class="modal-header">
           <span class="fs-3 fw-semibold">Update Username</span>
         </div>
-        <form action="update-username.php">
+        <form action="Persistence/UserRepository/update-username.php" method="post">
           <div class="modal-body">
             <div class="mb-3">
               <label for="username">New Username</label>
-              <input type="text" class="form-control">
+              <input type="text" class="form-control" name="username" required>
             </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Save</button>
-              <a class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" data-bs-dismiss="modal">Cancel</a>
+          </div>
         </form>
       </div>
     </div>
@@ -77,7 +84,7 @@
         <h1>User Information</h1>
         <span>Username</span>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" aria-label="Username of the User" aria-describedby="username-input" value="MaJul" disabled>
+          <input type="text" class="form-control" aria-label="Username of the User" aria-describedby="username-input" value="<?= htmlspecialchars($_SESSION['username'] ?? '') ?>" disabled>
           <a class="btn btn-outline-secondary" type="button" id="username-input" data-bs-toggle="modal" href="#update-username"><i class="bi bi-pencil-square"></i></a>
         </div>
         <span>Password</span>
@@ -85,11 +92,14 @@
           <input type="password" class="form-control" aria-label="Password of the User" aria-describedby="password-input" value="SamplePassword" disabled>
           <a class="btn btn-outline-secondary" type="button" id="password-input" data-bs-toggle="modal" href="#update-password"><i class="bi bi-pencil-square"></i></a>
         </div>
-        <button class="btn btn-primary w-100 mb-3">Logout</button>
+        <button class="btn btn-primary w-100 mb-3" onclick="window.location.href='logout.php'">Logout</button>
         <button class="btn btn-danger w-100">Delete Account</button>
       </div>
     </div>
-    <script>window.activeSidebar = 'user';</script>
+    <script>
+      window.activeSidebar = 'user';
+      window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
+    </script>
     <script src="js/sidebar.js"></script>
 </body>
 </html>
