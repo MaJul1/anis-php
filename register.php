@@ -24,7 +24,7 @@
         </div>
         <div class="mb-3">
           <button type="submit" class="btn btn-primary w-100 mb-3">Register</button>
-          <a href="#" class="btn btn-secondary w-100">Cancel</a>
+          <a href="login.php" class="btn btn-secondary w-100">Cancel</a>
         </div>
       </form>
     </div>

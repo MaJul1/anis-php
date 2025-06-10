@@ -8,7 +8,7 @@ CREATE TABLE `User`
 (
     Id INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255) UNIQUE,
-    IsDeleted TINYINT(1),
+    IsDeleted TINYINT(1) DEFAULT 0,
     Password VARCHAR(255)
 );
 
@@ -18,9 +18,9 @@ CREATE TABLE Product
     Name VARCHAR(255),
     Price DECIMAL(10, 2),
     Unit VARCHAR(10),
-    QuantityPerUnit INT,
-    Archived TINYINT(1),
-    CurrentStockNumber INT,
+    QuantityPerUnit INT DEFAULT 0,
+    Archived TINYINT(1) DEFAULT 0,
+    CurrentStockNumber INT DEFAULT 0,
     OutOfStockWarningThreshold INT,
     ExpirationWarningThreshold INT,
     OwnerId INT,
@@ -30,7 +30,7 @@ CREATE TABLE Product
 CREATE TABLE Restock 
 (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    CreatedDate DATE,
+    CreatedDate DATE DEFAULT(CURRENT_DATE),
     OwnerId INT,
     FOREIGN KEY (OwnerId) REFERENCES `User`(Id)
 );
@@ -40,7 +40,7 @@ CREATE TABLE RestockDetail
     Id INT AUTO_INCREMENT PRIMARY KEY,
     ExpirationDate DATE,
     Count INT,
-    IsExpiredChecked TINYINT(1),
+    IsExpiredChecked TINYINT(1) DEFAULT 0,
     ProductId INT,
     RestockId INT,
     FOREIGN KEY (ProductId) REFERENCES Product(Id),
@@ -50,7 +50,7 @@ CREATE TABLE RestockDetail
 CREATE TABLE StockOut
 (
     Id INT AUTO_INCREMENT PRIMARY KEY,
-    CreatedDate DATE,
+    CreatedDate DATE DEFAULT (CURRENT_DATE),
     OwnerId INT,
     FOREIGN KEY (OwnerId) REFERENCES `User`(Id)
 );

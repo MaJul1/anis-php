@@ -12,8 +12,9 @@
 <body class="bg-light">
   <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card shadow-sm p-4" style="min-width: 320px; max-width: 400px; width: 100%;">
-      <h2 class="mb-4 text-center">Login</h2>
-      <p class="text-center mb-4 text-secondary">Welcome to <span class="fw-semibold">Aling Nena's Inventory System (ANIS)</span></p>
+      <img src="assets/logo.png" alt="" style="max-width: 150px;" class="align-self-center">
+      <h2 class="mb-3 text-center">ANIS</h2>
+      <p class="text-center mb-4 text-secondary">Welcome to <span class="fw-semibold">Aling Nena's Inventory System</span></p>
       <form method="post" action="login.php">
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
@@ -24,7 +25,7 @@
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
-        <a href="#" class="btn btn-secondary w-100">Register</a>
+        <a href="register.php" class="btn btn-secondary w-100">Register</a>
       </form>
     </div>
   </div>
