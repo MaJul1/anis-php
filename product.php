@@ -234,107 +234,70 @@
     </div>
 
     <div class="d-flex">
-      <div class="d-flex flex-column offcanvas-md offcanvas-start p-3 bg-light position-fixed" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel" style="width: 235px; height: 100vh">
-        <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.php">
-          <div class="bg-secondary me-3 rounded" style="width: 40px; height: 40px"></div>
-          <span class="fs-4 d-md-inline fw-semibold">ANIS</span>
-        </a>
-        <hr />
-        <div class="mb-1 p-2 rounded">
-          <a class="text-dark text-decoration-none d-flex" href="index.php">
-            <i class="bi bi-speedometer2 me-2"></i>
-            Dashboard
-          </a>
+      <div id="sidebar"></div>
+      <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column">
+        <span class="fs-1 fw-bold">Products</span>
+        <div class="d-flex mb-3">
+          <div class="input-group justify-content-center">
+            <input type="text" class="form-control" placeholder="Product Name" aria-label="Product Name" aria-describedby="button-addon2" list="product-suggestions">
+            <datalist id="product-suggestions"></datalist>
+            <button class="btn btn-outline-secondary me-2" type="button" id="button-search">Search</button>
+          </div>
+          <button class="d-none d-lg-block btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" style="min-width: 160px;">Archived Products</button>
+          <button class="d-lg-none btn btn-primary text-light me-2"><i class="bi bi-archive"></i></button>
+          <button class="d-none d-lg-block btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product" style="min-width: 125px;">Add Product</button>
+          <button class="d-lg-none btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product">+</button>
         </div>
-        <div class="mb-1 bg-primary p-2 rounded">
-          <a class="text-white text-decoration-none d-flex" href="#">
-            <i class="bi bi-box me-2"></i>
-            Products
-          </a>
-        </div>
-        <div class="mb-1 p-2 rounded">
-          <a class="text-dark text-decoration-none d-flex" href="restock.php">
-            <i class="bi bi-box-arrow-in-down me-2"></i>
-            Restock
-          </a>
-        </div>
-        <div class="mb-1 p-2 rounded mb-auto">
-          <a class="text-dark text-decoration-none d-flex" href="stockout.php">
-            <i class="bi bi-box-arrow-up me-2"></i>
-            Stock Out
-          </a>
-        </div>
-        <hr class="mb-1">
-        <a href="user.php" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
-          <i class="bi bi-person-circle fs-1 me-3"></i>
-          Hello Majul
-        </a>
-      </div>
-      <div class="d-none d-md-block" style="min-width: 235px; height: 100vh;"></div>
+        <div class="table-responsive" style="max-height: 400px;">
+          <table class="table table-striped table-light table-hover table-bordered" id="product-table">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Unit Size</th>
+                <th sorted="col">Current Stocks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              include_once __DIR__ . '/Persistence/dbconn.php';
 
-     <!-- body -->
-    <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column">
-      <span class="fs-1 fw-bold">Products</span>
-      <div class="d-flex mb-3">
-        <div class="input-group justify-content-center">
-          <input type="text" class="form-control" placeholder="Product Name" aria-label="Product Name" aria-describedby="button-addon2" list="product-suggestions">
-          <datalist id="product-suggestions"></datalist>
-          <button class="btn btn-outline-secondary me-2" type="button" id="button-search">Search</button>
+              $sql = "SELECT Id, Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE ORDER BY Name ASC";
+              $result = $conn->query($sql);
+              if ($result && $result->num_rows > 0) {
+                  $i = 1;
+                  while ($row = $result->fetch_assoc()) {
+                      $name = $row['Name'];
+                      $unitSize = $row['QuantityPerUnit'] . ' ' . $row['Unit'];
+                      echo '<tr data-bs-toggle="modal" data-bs-target="#read-product"';
+                      echo ' data-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '"';
+                      echo ' data-name="' . htmlspecialchars($name, ENT_QUOTES) . '"';
+                      echo ' data-price="' . htmlspecialchars($row['Price'], ENT_QUOTES) . '"';
+                      echo ' data-unit="' . htmlspecialchars($row['Unit'], ENT_QUOTES) . '"';
+                      echo ' data-qpu="' . htmlspecialchars($row['QuantityPerUnit'], ENT_QUOTES) . '"';
+                      echo ' data-expwarn="' . htmlspecialchars($row['ExpirationWarningThreshold'], ENT_QUOTES) . '"';
+                      echo ' data-stockwarn="' . htmlspecialchars($row['OutOfStockWarningThreshold'], ENT_QUOTES) . '"';
+                      echo '>';
+                      echo '<th>' . $i . '</th>';
+                      echo '<td>' . htmlspecialchars($name) . '</td>';
+                      echo '<td>' . number_format($row['Price'], 2) . ' Php</td>';
+                      echo '<td>' . htmlspecialchars($unitSize) . '</td>';
+                      echo '<td>' . $row['CurrentStockNumber'] . '</td>';
+                      echo '</tr>';
+                      $i++;
+                  }
+              } else {
+                  echo '<tr><td colspan="5" class="text-center">No products found.</td></tr>';
+              }
+              ?>
+            </tbody>
+          </table>
         </div>
-        <button class="d-none d-lg-block btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" style="min-width: 160px;">Archived Products</button>
-        <button class="d-lg-none btn btn-primary text-light me-2"><i class="bi bi-archive"></i></button>
-        <button class="d-none d-lg-block btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product" style="min-width: 125px;">Add Product</button>
-        <button class="d-lg-none btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product">+</button>
-      </div>
-      <div class="table-responsive" style="max-height: 400px;">
-        <table class="table table-striped table-light table-hover table-bordered" id="product-table">
-          <thead class="table-light">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Unit Size</th>
-              <th sorted="col">Current Stocks</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            include_once __DIR__ . '/Persistence/dbconn.php';
-
-            $sql = "SELECT Id, Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE ORDER BY Name ASC";
-            $result = $conn->query($sql);
-            if ($result && $result->num_rows > 0) {
-                $i = 1;
-                while ($row = $result->fetch_assoc()) {
-                    $name = $row['Name'];
-                    $unitSize = $row['QuantityPerUnit'] . ' ' . $row['Unit'];
-                    echo '<tr data-bs-toggle="modal" data-bs-target="#read-product"';
-                    echo ' data-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '"';
-                    echo ' data-name="' . htmlspecialchars($name, ENT_QUOTES) . '"';
-                    echo ' data-price="' . htmlspecialchars($row['Price'], ENT_QUOTES) . '"';
-                    echo ' data-unit="' . htmlspecialchars($row['Unit'], ENT_QUOTES) . '"';
-                    echo ' data-qpu="' . htmlspecialchars($row['QuantityPerUnit'], ENT_QUOTES) . '"';
-                    echo ' data-expwarn="' . htmlspecialchars($row['ExpirationWarningThreshold'], ENT_QUOTES) . '"';
-                    echo ' data-stockwarn="' . htmlspecialchars($row['OutOfStockWarningThreshold'], ENT_QUOTES) . '"';
-                    echo '>';
-                    echo '<th>' . $i . '</th>';
-                    echo '<td>' . htmlspecialchars($name) . '</td>';
-                    echo '<td>' . number_format($row['Price'], 2) . ' Php</td>';
-                    echo '<td>' . htmlspecialchars($unitSize) . '</td>';
-                    echo '<td>' . $row['CurrentStockNumber'] . '</td>';
-                    echo '</tr>';
-                    $i++;
-                }
-            } else {
-                echo '<tr><td colspan="5" class="text-center">No products found.</td></tr>';
-            }
-            ?>
-          </tbody>
-        </table>
       </div>
     </div>
-  </div>
-
+    <script>window.activeSidebar = 'product';</script>
+    <script src="js/sidebar.js"></script>
   <script>
   const productNames = [
     <?php

@@ -151,44 +151,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     </div>
 
     <div class="d-flex">
-      <div class="d-flex flex-column offcanvas-md offcanvas-start p-3 bg-light position-fixed" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel" style="width: 235px; height: 100vh">
-        <a class="d-flex align-items-center mb-0 mb-md-1 link-dark text-decoration-none" href="index.php">
-          <div class="bg-secondary me-3 rounded" style="width: 40px; height: 40px"></div>
-          <span class="fs-4 d-md-inline fw-semibold">ANIS</span>
-        </a>
-        <hr />
-        <div class="mb-1 p-2 rounded">
-          <a class="text-dark text-decoration-none d-flex" href="index.php">
-            <i class="bi bi-speedometer2 me-2"></i>
-            Dashboard
-          </a>
-        </div>
-        <div class="mb-1 p-2 rounded">
-          <a class="text-dark text-decoration-none d-flex" href="product.php">
-            <i class="bi bi-box me-2"></i>
-            Products
-          </a>
-        </div>
-        <div class="mb-1 bg-primary p-2 rounded">
-          <a class="text-white text-decoration-none d-flex" href="#">
-            <i class="bi bi-box-arrow-in-down me-2"></i>
-            Restock
-          </a>
-        </div>
-        <div class="mb-1 p-2 rounded mb-auto">
-          <a class="text-dark text-decoration-none d-flex" href="stockout.php">
-            <i class="bi bi-box-arrow-up me-2"></i>
-            Stock Out
-          </a>
-        </div>
-        <hr class="mb-1">
-        <a href="user.php" class="d-flex align-items-center text-decoration-none text-dark ps-2 rounded">
-          <i class="bi bi-person-circle fs-1 me-3"></i>
-          Hello Majul
-        </a>
-      </div>
-      <div class="d-none d-md-block" style="min-width: 235px; height: 100vh;"></div>
-
+      <div id="sidebar"></div>
       <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column">
         <span class="fs-1 fw-bold">Restocks</span>
         <div class=" mb-3">
@@ -236,6 +199,8 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         </div>
       </div>
     </div>
+      <script>window.activeSidebar = 'restock';</script>
+      <script src="js/sidebar.js"></script>
       <script src="js/restock.js"></script>
   </body>
 </html>
