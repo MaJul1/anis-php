@@ -37,7 +37,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,7 +57,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
           </div>
           <div class="modal-body">
             <form id="create-restock-form" autocomplete="off">
-              <table class="table table-striped table-light table-bordered mb-0" style="min-width: 600px;">
+              <table class="table table-striped table-bordered mb-0" style="min-width: 600px;">
                 <thead>
                   <tr>
                     <th>Product Name</th>
@@ -154,9 +154,9 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
     </div>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
       <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
-        <i class="bi bi-list border border-1 border-secondary rounded text-dark fs-2 ps-2 pe-2"></i>
+        <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
     </div>
 
@@ -170,7 +170,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
         </div>
         <div class="table-responsive" style="max-height: 400px;">
           <table
-            class="table table-striped table-light table-hover table-bordered">
+            class="table table-striped table-hover table-bordered">
             <thead>
               <tr>
                 <th>#</th>

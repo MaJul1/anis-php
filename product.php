@@ -9,7 +9,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -192,8 +192,8 @@
               <span class="fs-3 fw-semibold">Archived Products</span>
             </div>
             <div class="modal-body">
-              <table class="table table-striped table-light table-hover table-bordered" id="archived-product-table">
-                <thead class="table-light">
+              <table class="table table-striped table-hover table-bordered" id="archived-product-table">
+                <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
@@ -239,9 +239,9 @@
       </div>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
       <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
-        <i class="bi bi-list border border-1 border-secondary rounded text-dark fs-2 ps-2 pe-2"></i>
+        <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
     </div>
 
@@ -261,8 +261,8 @@
           <button class="d-lg-none btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product">+</button>
         </div>
         <div class="table-responsive" style="max-height: 400px;">
-          <table class="table table-striped table-light table-hover table-bordered" id="product-table">
-            <thead class="table-light">
+          <table class="table table-striped table-hover table-bordered" id="product-table">
+            <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Name</th>

@@ -11,7 +11,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 
   <head>
     <meta charset="UTF-8" />
@@ -26,9 +26,9 @@
   <body>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
       <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
-        <i class="bi bi-list border border-1 border-secondary rounded text-dark fs-2 ps-2 pe-2"></i>
+        <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
     </div>
 
@@ -106,12 +106,12 @@
           </div>
         </div>
         <div
-          class="border border-1 border-opacity-25 border-dark rounded p-2 mb-4">
+          class="border border-1 border-opacity-25 rounded p-2 mb-4">
           <span class="fs-4 fw-semibold">Out of Stock Warning</span>
           <div class="table-responsive mt-4" style="max-height: 400px">
             <table
-              class="table table-striped table-bordered align-middle table-light">
-              <thead class="table-light">
+              class="table table-striped table-bordered align-middle">
+              <thead>
                 <tr>
                   <th scope="col" class="d-none d-md-block">#</th>
                   <th scope="col">Name</th>
@@ -145,12 +145,12 @@
             <a class="btn btn-primary" href="restock.php">Restock Products</a>
           </div>
         </div>
-        <div class="border border-1 border-opacity-25 border-dark rounded p-2">
+        <div class="border border-1 border-opacity-25 rounded p-2">
           <span class="fs-4 fw-semibold">Expired Stocks Warning</span>
           <div class="table-responsive mt-4" style="max-height: 350px">
             <table
-              class="table table-striped table-bordered align-middle table-light">
-              <thead class="table-light">
+              class="table table-striped table-bordered align-middle">
+              <thead>
                 <tr>
                   <th scope="col" class="d-none d-md-block">#</th>
                   <th scope="col">Name</th>
