@@ -93,7 +93,7 @@ if (!isset($_SESSION['user_id'])) {
           <a class="btn btn-outline-secondary" type="button" id="password-input" data-bs-toggle="modal" href="#update-password"><i class="bi bi-pencil-square"></i></a>
         </div>
         <button class="btn btn-primary w-100 mb-3" onclick="window.location.href='logout.php'">Logout</button>
-        <button class="btn btn-danger w-100">Delete Account</button>
+        <button class="btn btn-danger w-100" id="delete-account-btn">Delete Account</button>
       </div>
     </div>
     <script>
@@ -101,5 +101,6 @@ if (!isset($_SESSION['user_id'])) {
       window.sidebarUsername = "<?= htmlspecialchars($_SESSION['username'] ?? '') ?>";
     </script>
     <script src="js/sidebar.js"></script>
+    <script src="js/user.js"></script>
 </body>
 </html>
