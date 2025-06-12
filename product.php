@@ -205,7 +205,8 @@
                 <tbody>
                   <?php
                   include_once __DIR__ . '/Persistence/dbconn.php';
-                  $sql = "SELECT Id, Name, Price, QuantityPerUnit, Unit FROM Product WHERE Archived = TRUE ORDER BY Name ASC";
+                  $userId = $_SESSION['user_id'];
+                  $sql = "SELECT Id, Name, Price, QuantityPerUnit, Unit FROM Product WHERE Archived = TRUE AND OwnerId = $userId ORDER BY Name ASC";
                   $result = $conn->query($sql);
                   if ($result && $result->num_rows > 0) {
                       $i = 1;
@@ -274,7 +275,7 @@
               <?php
               include_once __DIR__ . '/Persistence/dbconn.php';
 
-              $sql = "SELECT Id, Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE ORDER BY Name ASC";
+              $sql = "SELECT Id, Name, QuantityPerUnit, Unit, Price, CurrentStockNumber, ExpirationWarningThreshold, OutOfStockWarningThreshold FROM Product WHERE Archived = FALSE AND OwnerId = $userId ORDER BY Name ASC";
               $result = $conn->query($sql);
               if ($result && $result->num_rows > 0) {
                   $i = 1;
@@ -316,7 +317,8 @@
     const productNames = [
       <?php
         include_once __DIR__ . '/Persistence/dbconn.php';
-        $query = "SELECT Name FROM Product;";
+        $userId = $_SESSION['user_id'];
+        $query = "SELECT Name FROM Product WHERE OwnerId = $userId;";
         $result = $conn->query($query);
         if ($result && $result->num_rows > 0) {
           $names = [];

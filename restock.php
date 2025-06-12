@@ -7,12 +7,16 @@ if (!isset($_SESSION['user_id'])) {
 // Add this at the very top of the file, before <!DOCTYPE html>
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest') {
     include_once __DIR__ . '/Persistence/dbconn.php';
-    $sql = "SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
+    $userId = $_SESSION['user_id'];
+    $stmt = $conn->prepare("SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
             FROM Restock r
             LEFT JOIN RestockDetail rd ON r.Id = rd.RestockId
+            WHERE r.OwnerId = ?
             GROUP BY r.Id, r.CreatedDate
-            ORDER BY r.CreatedDate DESC";
-    $result = $conn->query($sql);
+            ORDER BY r.CreatedDate DESC");
+    $stmt->bind_param('i', $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
     if ($result && $result->num_rows > 0) {
         $i = 1;
         while ($row = $result->fetch_assoc()) {
@@ -177,13 +181,16 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             <tbody>
               <?php
               include_once __DIR__ . '/Persistence/dbconn.php';
-              // Fetch all restocks with their id, date, and number of products restocked
-              $sql = "SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
+              $userId = $_SESSION['user_id'];
+              $stmt = $conn->prepare("SELECT r.Id, r.CreatedDate, COUNT(rd.Id) as ProductCount
                       FROM Restock r
                       LEFT JOIN RestockDetail rd ON r.Id = rd.RestockId
+                      WHERE r.OwnerId = ?
                       GROUP BY r.Id, r.CreatedDate
-                      ORDER BY r.CreatedDate DESC";
-              $result = $conn->query($sql);
+                      ORDER BY r.CreatedDate DESC");
+              $stmt->bind_param('i', $userId);
+              $stmt->execute();
+              $result = $stmt->get_result();
               if ($result && $result->num_rows > 0) {
                   $i = 1;
                   while ($row = $result->fetch_assoc()) {

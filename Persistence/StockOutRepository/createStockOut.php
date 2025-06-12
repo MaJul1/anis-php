@@ -1,6 +1,13 @@
 <?php
 include_once __DIR__ . '/../dbconn.php';
+session_start();
 header('Content-Type: application/json');
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    exit;
+}
+$userId = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -25,10 +32,10 @@ foreach ($products as $prod) {
         echo json_encode(['error' => 'Invalid product or count']);
         exit;
     }
-    $checkStmt = $conn->prepare("SELECT Name, CurrentStockNumber FROM product WHERE Id = ?");
+    $checkStmt = $conn->prepare("SELECT Name, CurrentStockNumber, OwnerId FROM product WHERE Id = ?");
     $checkStmt->bind_param('i', $productId);
     $checkStmt->execute();
-    $checkStmt->bind_result($productName, $currentStock);
+    $checkStmt->bind_result($productName, $currentStock, $ownerId);
     $checkStmt->fetch();
     $checkStmt->close();
     if ($currentStock < $count) {
@@ -40,12 +47,19 @@ foreach ($products as $prod) {
         ]);
         exit;
     }
+    if ($ownerId !== $userId) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Unauthorized product access']);
+        exit;
+    }
 }
 
 // Insert new stockout
 $conn->begin_transaction();
 try {
-    $stmt = $conn->prepare("INSERT INTO stockout () VALUES ()");
+    $stockOutDate = date('Y-m-d H:i:s');
+    $stmt = $conn->prepare("INSERT INTO stockout (CreatedDate, OwnerId) VALUES (?, ?)");
+    $stmt->bind_param('si', $stockOutDate, $userId);
     $stmt->execute();
     $stockoutId = $stmt->insert_id;
     $stmt->close();
@@ -57,8 +71,8 @@ try {
         $stmt->execute();
         $stmt->close();
         // Decrease product stock
-        $updateStmt = $conn->prepare("UPDATE product SET CurrentStockNumber = CurrentStockNumber - ? WHERE Id = ?");
-        $updateStmt->bind_param('ii', $count, $productId);
+        $updateStmt = $conn->prepare("UPDATE product SET CurrentStockNumber = CurrentStockNumber - ? WHERE Id = ? AND OwnerId = ?");
+        $updateStmt->bind_param('iii', $count, $productId, $userId);
         $updateStmt->execute();
         $updateStmt->close();
     }

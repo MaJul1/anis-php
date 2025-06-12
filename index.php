@@ -45,7 +45,8 @@
                 <span class="fs-1 fw-bold">
                   <?php
                   include_once __DIR__ . '/Persistence/dbconn.php';
-                  $result = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE Archived = FALSE");
+                  $userId = $_SESSION['user_id'];
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE Archived = FALSE AND OwnerId = $userId");
                   $row = $result->fetch_assoc();
                   echo $row['total'];
                   ?>
@@ -59,7 +60,8 @@
                 <span class="fs-3 fw-bold">Total Restocks</span>
                 <span class="fs-1 fw-bold">
                   <?php
-                  $result = $conn->query("SELECT COUNT(*) AS total FROM Restock");
+                  $userId = $_SESSION['user_id'];
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM Restock WHERE OwnerId = $userId");
                   $row = $result->fetch_assoc();
                   echo $row['total'];
                   ?>
@@ -73,7 +75,8 @@
                 <span class="fs-3 fw-bold">Total Stock Outs</span>
                 <span class="fs-1 fw-bold">
                   <?php
-                  $result = $conn->query("SELECT COUNT(*) AS total FROM StockOut");
+                  $userId = $_SESSION['user_id'];
+                  $result = $conn->query("SELECT COUNT(*) AS total FROM StockOut WHERE OwnerId = $userId");
                   $row = $result->fetch_assoc();
                   echo $row['total'];
                   ?>
@@ -87,12 +90,13 @@
                 <span class="fs-3 fw-bold">Total Warnings</span>
                 <span class="fs-1 fw-bold">
                   <?php
-                  // Out of stock warnings
-                  $result1 = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE");
+                  $userId = $_SESSION['user_id'];
+                  // Out of stock warnings for this user
+                  $result1 = $conn->query("SELECT COUNT(*) AS total FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE AND OwnerId = $userId");
                   $row1 = $result1->fetch_assoc();
-                  // Expired/near expired warnings
+                  // Expired/near expired warnings for this user
                   $today = date('Y-m-d');
-                  $result2 = $conn->query("SELECT COUNT(*) AS total FROM RestockDetail rd INNER JOIN Product p ON rd.ProductId = p.Id WHERE rd.ExpirationDate IS NOT NULL AND rd.IsExpiredChecked = FALSE AND p.Archived = FALSE AND rd.ExpirationDate <= DATE_ADD('$today', INTERVAL p.ExpirationWarningThreshold DAY) AND rd.ExpirationDate >= '$today'");
+                  $result2 = $conn->query("SELECT COUNT(*) AS total FROM RestockDetail rd INNER JOIN Product p ON rd.ProductId = p.Id WHERE rd.ExpirationDate IS NOT NULL AND rd.IsExpiredChecked = FALSE AND p.Archived = FALSE AND p.OwnerId = $userId AND rd.ExpirationDate <= DATE_ADD('$today', INTERVAL p.ExpirationWarningThreshold DAY) AND rd.ExpirationDate >= '$today'");
                   $row2 = $result2->fetch_assoc();
                   echo ($row1['total'] + $row2['total']);
                   ?>
@@ -116,7 +120,8 @@
               </thead>
               <tbody>
               <?php
-                $sql = "SELECT Name, QuantityPerUnit, Unit, Price, CurrentStockNumber FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE";
+                $userId = $_SESSION['user_id'];
+                $sql = "SELECT Name, QuantityPerUnit, Unit, Price, CurrentStockNumber FROM Product WHERE CurrentStockNumber < OutOfStockWarningThreshold AND Archived = FALSE AND OwnerId = $userId";
                 $result = $conn->query($sql);
                 if ($result && $result->num_rows > 0) {
                     $i = 1;
@@ -155,6 +160,7 @@
               </thead>
               <tbody>
               <?php
+                $userId = $_SESSION['user_id'];
                 $today = date('Y-m-d');
                 $sql = "SELECT p.Name, p.QuantityPerUnit, p.Unit, p.Price, rd.ExpirationDate, rd.Count
                         FROM RestockDetail rd
@@ -162,6 +168,7 @@
                         WHERE rd.ExpirationDate IS NOT NULL
                           AND rd.IsExpiredChecked = FALSE
                           AND p.Archived = FALSE
+                          AND p.OwnerId = $userId
                           AND rd.ExpirationDate <= DATE_ADD('$today', INTERVAL p.ExpirationWarningThreshold DAY)
                           AND rd.ExpirationDate >= '$today' 
                         ORDER BY rd.ExpirationDate ASC";

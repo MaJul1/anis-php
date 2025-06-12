@@ -1,7 +1,14 @@
 <?php
 include_once __DIR__ . '/../dbconn.php';
+session_start();
 
 header('Content-Type: application/json');
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    exit;
+}
+$userId = $_SESSION['user_id'];
 
 if (!isset($_GET['stockout_id'])) {
     http_response_code(400);
@@ -10,6 +17,19 @@ if (!isset($_GET['stockout_id'])) {
 }
 
 $stockoutId = intval($_GET['stockout_id']);
+
+// Ownership check
+$sql = "SELECT 1 FROM stockout WHERE Id = ? AND OwnerId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('ii', $stockoutId, $userId);
+$stmt->execute();
+$stmt->store_result();
+if ($stmt->num_rows === 0) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    exit;
+}
+$stmt->close();
+
 $sql = "SELECT p.Name, sd.StockOutCount, sd.ProductId
         FROM stockoutdetail sd
         JOIN product p ON sd.ProductId = p.Id

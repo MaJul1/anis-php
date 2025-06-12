@@ -1,12 +1,31 @@
 <?php
 require_once '../../Persistence/dbconn.php';
+session_start();
 header('Content-Type: application/json');
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    exit;
+}
+$userId = $_SESSION['user_id'];
 
 $restockId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($restockId <= 0) {
     echo json_encode(['success' => false, 'message' => 'Invalid restock ID.']);
     exit;
 }
+
+// Ownership check
+$sql = "SELECT 1 FROM Restock WHERE Id = ? AND OwnerId = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param('ii', $restockId, $userId);
+$stmt->execute();
+$stmt->store_result();
+if ($stmt->num_rows === 0) {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    exit;
+}
+$stmt->close();
 
 $sql = "SELECT r.CreatedDate, p.Name AS ProductName, p.Id AS ProductId, rd.ExpirationDate, rd.Count, rd.Id AS RestockDetailId
         FROM Restock r

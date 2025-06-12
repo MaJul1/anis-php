@@ -169,12 +169,16 @@ if (!isset($_SESSION['user_id'])) {
           <tbody>
             <?php
             include_once __DIR__ . '/Persistence/dbconn.php';
-            $sql = "SELECT s.Id, s.CreatedDate, COUNT(sd.Id) as ProductCount
+            $userId = $_SESSION['user_id'];
+            $stmt = $conn->prepare("SELECT s.Id, s.CreatedDate, COUNT(sd.Id) as ProductCount
                     FROM stockout s
                     LEFT JOIN stockoutdetail sd ON s.Id = sd.StockOutId
+                    WHERE s.OwnerId = ?
                     GROUP BY s.Id, s.CreatedDate
-                    ORDER BY s.CreatedDate DESC";
-            $result = $conn->query($sql);
+                    ORDER BY s.CreatedDate DESC");
+            $stmt->bind_param('i', $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
             if ($result && $result->num_rows > 0) {
                 $i = 1;
                 while ($row = $result->fetch_assoc()) {
