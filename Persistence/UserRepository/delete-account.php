@@ -10,14 +10,8 @@ require_once '../../Persistence/dbconn.php';
 
 try {
     $conn->begin_transaction();
-    // Delete all user-owned products (and cascade deletes for related restocks/stockouts if set in DB)
-    $conn->query("DELETE FROM Product WHERE OwnerId = $userId");
-    // Delete all restocks and details
-    $conn->query("DELETE FROM Restock WHERE OwnerId = $userId");
-    // Delete all stockouts and details
-    $conn->query("DELETE FROM stockout WHERE OwnerId = $userId");
-    // Delete the user
-    $conn->query("DELETE FROM User WHERE Id = $userId");
+    // Mark user as deleted
+    $conn->query("UPDATE User SET IsDeleted = 1 WHERE Id = $userId");
     $conn->commit();
     session_destroy();
     echo json_encode(['success' => true]);
