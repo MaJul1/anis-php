@@ -1,0 +1,8 @@
+<Files "CHANGELOG.md">
+  Order allow,deny
+  Deny from all
+</Files>
+<Files "README.md">
+  Order allow,deny
+  Deny from all
+</Files>
