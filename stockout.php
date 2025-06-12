@@ -27,7 +27,7 @@ if (!isset($_SESSION['user_id'])) {
           </div>
           <div class="modal-body">
             <form id="create-stock-out-form" autocomplete="off">
-              <table class="table table-striped table-light table-bordered mb-0">
+              <table class="table table-striped table-light table-bordered mb-0" style="min-width: 600px;">
                 <thead>
                   <tr>
                     <th>Product Name</th>

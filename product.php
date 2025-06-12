@@ -255,7 +255,7 @@
             <button class="btn btn-outline-secondary me-2" type="button" id="button-search">Search</button>
           </div>
           <button class="d-none d-lg-block btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" style="min-width: 160px;">Archived Products</button>
-          <button class="d-lg-none btn btn-primary text-light me-2"><i class="bi bi-archive"></i></button>
+          <button class="d-lg-none btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" ><i class="bi bi-archive"></i></button>
           <button class="d-none d-lg-block btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product" style="min-width: 125px;">Add Product</button>
           <button class="d-lg-none btn btn-primary text-light" data-bs-toggle="modal" data-bs-target="#create-product">+</button>
         </div>

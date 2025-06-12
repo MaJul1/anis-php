@@ -53,7 +53,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
           </div>
           <div class="modal-body">
             <form id="create-restock-form" autocomplete="off">
-              <table class="table table-striped table-light table-bordered mb-0">
+              <table class="table table-striped table-light table-bordered mb-0" style="min-width: 600px;">
                 <thead>
                   <tr>
                     <th>Product Name</th>
