@@ -50,7 +50,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
   <body>
     <!-- modal-create-restock -->
     <div class="modal fade" id="create-restock" data-bs-backdrop="static" tabindex="-1" aria-labelledby="createRestockLabel" aria-modal="true" role="dialog">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-dialog modal-dialog-scrollable modal-fullscreen">
         <div class="modal-content">
           <div class="modal-header">
             <span class="fs-3 fw-semibold" id="createRestockLabel">Create New Restock</span>
