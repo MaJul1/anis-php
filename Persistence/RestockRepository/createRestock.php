@@ -31,7 +31,7 @@ try {
         $pid = $item['product_id'];
         $exp = $item['expiration_date'];
         $count = $item['count'];
-        if (!$pid || !$exp || !$count || $count < 1) {
+        if (!$pid || !$count || $count < 1) {
             throw new Exception('Invalid product data.');
         }
         // Check product ownership
@@ -43,7 +43,13 @@ try {
             throw new Exception('Unauthorized product.');
         }
         $check->close();
-        $insertDetail->bind_param('iisi', $restockId, $pid, $exp, $count);
+        // Handle nullable expiration date
+        if ($exp === null || $exp === '') {
+            $expParam = null;
+            $insertDetail->bind_param('iisi', $restockId, $pid, $expParam, $count);
+        } else {
+            $insertDetail->bind_param('iisi', $restockId, $pid, $exp, $count);
+        }
         $insertDetail->execute();
         $updateStock->bind_param('iii', $count, $pid, $userId);
         $updateStock->execute();

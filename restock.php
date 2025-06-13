@@ -139,7 +139,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                   <input class="form-control" type="date" id="add-missing-product-expiration-date">
                 </div>
                 <div class="col-sm mb-3">
-                  <label class="form-label" for="add-missing-product-count">Stock Count</label>
+                  <label for="add-missing-product-count">Stock Count</label>
                   <input class="form-control" type="number" id="add-missing-product-count">
                 </div>
               </div>
