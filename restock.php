@@ -96,7 +96,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
           </div>
           <div class="modal-body">
             <input type="hidden" id="modal-restock-id" value="">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered" id="restock-product-table">
               <thead>
                 <tr>
                   <th>Product Name</th>
@@ -113,7 +113,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
             </table>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary btn-print-restock">Print</button>
+            <button class="btn btn-secondary btn-print-restock" id="print-restock-product-table-button">Print</button>
             <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
@@ -187,7 +187,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'
                       LEFT JOIN RestockDetail rd ON r.Id = rd.RestockId
                       WHERE r.OwnerId = ?
                       GROUP BY r.Id, r.CreatedDate
-                      ORDER BY r.CreatedDate DESC");
+                      ORDER BY r.Id DESC");
               $stmt->bind_param('i', $userId);
               $stmt->execute();
               $result = $stmt->get_result();

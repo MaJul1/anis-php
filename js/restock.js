@@ -326,32 +326,63 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // --- Print Restock Logic ---
+  // --- Print Restock Details Logic ---
   function setupRestockPrintButton() {
-    const printBtn = document.getElementById('print-restock-btn');
+    const printBtn = document.getElementById('print-restock-product-table-button');
     if (!printBtn) return;
     printBtn.onclick = function () {
-      const restockId = document.getElementById('modal-restock-id').value;
-      if (!restockId) return;
-      // Open the print view in a new window
-      window.open('printRestock.php?id=' + encodeURIComponent(restockId), '_blank');
+      // Get modal and table
+      const modal = document.getElementById('restock-view');
+      const table = modal.querySelector('table');
+      const header = modal.querySelector('.modal-header span');
+      if (!table) return;
+      // Remove the last th (Action) from thead for print
+      const thead = table.querySelector('thead');
+      let theadHtml = '';
+      if (thead) {
+        const thRow = thead.querySelector('tr');
+        if (thRow && thRow.children.length > 3) {
+          const thClone = thRow.cloneNode(true);
+          thClone.removeChild(thClone.lastElementChild);
+          theadHtml = `<tr>${thClone.innerHTML}</tr>`;
+        } else if (thRow) {
+          theadHtml = `<tr>${thRow.innerHTML}</tr>`;
+        }
+      }
+      // Build HTML for print
+      let title = header ? header.textContent : 'Restock Details';
+      let html = `
+        <html>
+        <head>
+          <title>${title}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            table { border-collapse: collapse; width: 100%; }
+            th, td { border: 1px solid #333; padding: 4px; text-align: left; }
+            th { background: #eee; }
+          </style>
+        </head>
+        <body>
+          <h2>${title}</h2>
+          <table>
+            <thead>${theadHtml}</thead>
+            <tbody>`;
+      // Only print product rows (skip the add-missing-product row and the action column)
+      table.querySelectorAll('tbody tr').forEach(row => {
+        if (row.querySelector('button[data-bs-target="#add-missing-product"]')) return;
+        const clone = row.cloneNode(true);
+        if (clone.children.length > 3) {
+          clone.removeChild(clone.lastElementChild);
+        }
+        html += `<tr>${clone.innerHTML}</tr>`;
+      });
+      html += `</tbody></table></body></html>`;
+      // Open print window
+      const printWindow = window.open('', '', 'width=800,height=600');
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
     };
   }
-
-  // Initial setup: hide modals, setup tooltips, etc.
-  const createRestockModal = document.getElementById('create-restock');
-  if (createRestockModal) {
-    const modal = bootstrap.Modal.getOrCreateInstance(createRestockModal);
-    modal.hide();
-  }
-  const restockViewModal = document.getElementById('restock-view');
-  if (restockViewModal) {
-    const modal = bootstrap.Modal.getOrCreateInstance(restockViewModal);
-    modal.hide();
-  }
-  // Setup tooltips
-  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-  tooltipTriggerList.forEach(tooltipTriggerEl => {
-    new bootstrap.Tooltip(tooltipTriggerEl);
-  });
 });

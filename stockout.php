@@ -134,7 +134,7 @@ if (!isset($_SESSION['user_id'])) {
             </form>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary" id="save-stockout-missing-product-button">Save</button>
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -175,7 +175,7 @@ if (!isset($_SESSION['user_id'])) {
                     LEFT JOIN stockoutdetail sd ON s.Id = sd.StockOutId
                     WHERE s.OwnerId = ?
                     GROUP BY s.Id, s.CreatedDate
-                    ORDER BY s.CreatedDate DESC");
+                    ORDER BY s.Id DESC");
             $stmt->bind_param('i', $userId);
             $stmt->execute();
             $result = $stmt->get_result();
