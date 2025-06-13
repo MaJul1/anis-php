@@ -64,3 +64,5 @@ CREATE TABLE StockOutDetail
     FOREIGN KEY (ProductId) REFERENCES Product(Id),
     FOREIGN KEY (StockOutId) REFERENCES StockOut(Id)
 );
+
+ALTER TABLE RestockDetail MODIFY COLUMN ExpirationDate DATE NULL;

@@ -165,7 +165,7 @@
                 $sql = "SELECT p.Name, p.QuantityPerUnit, p.Unit, p.Price, rd.ExpirationDate, rd.Count
                         FROM RestockDetail rd
                         INNER JOIN Product p ON rd.ProductId = p.Id
-                        WHERE rd.ExpirationDate IS NOT NULL
+                        WHERE rd.ExpirationDate IS NOT NULL AND rd.ExpirationDate != ''
                           AND rd.IsExpiredChecked = FALSE
                           AND p.Archived = FALSE
                           AND p.OwnerId = $userId

@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id'])) {
 <body>
     <!-- modal-create-stock-out -->
     <div class="modal fade" id="create-stock-out" data-bs-backdrop="static">
-      <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <span class="fs-3 fw-semibold">Create New Stock Out</span>

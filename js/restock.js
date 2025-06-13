@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="invalid-feedback"></div>
       </td>
       <td>
-        <input type="date" class="form-control exp-date" required aria-label="Expiration Date">
+        <input type="date" class="form-control exp-date" aria-label="Expiration Date">
+        <div class="form-text">Leave blank if not applicable.</div>
         <div class="invalid-feedback"></div>
       </td>
       <td>
@@ -67,9 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const exp = row.querySelector('.exp-date');
       const expFeedback = exp.nextElementSibling;
       if (!exp.value) {
-        exp.classList.add('is-invalid');
-        expFeedback.textContent = 'Expiration date required.';
-        valid = false;
+        exp.classList.remove('is-invalid');
+        expFeedback.textContent = '';
       } else if (isNaN(Date.parse(exp.value)) || new Date(exp.value) < new Date().setHours(0,0,0,0)) {
         exp.classList.add('is-invalid');
         expFeedback.textContent = 'Enter a valid future date.';
@@ -155,13 +155,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Delegate click event for restock table rows
-  document.querySelectorAll('table.table-striped.table-light.table-hover.table-bordered tbody').forEach(tbody => {
+  document.querySelectorAll('table.table-striped.table-hover.table-bordered tbody').forEach(tbody => {
     tbody.addEventListener('click', function (e) {
       let row = e.target.closest('tr');
       if (!row) return;
-      const idInput = row.querySelector('.restock-id');
-      if (!idInput) return;
-      const restockId = idInput.value;
+      // Ignore the Add Missing Product row
+      if (row.querySelector('button[data-bs-target="#add-missing-product"]')) return;
+      // Try to get restock id from data attribute or hidden input
+      let restockId = row.getAttribute('data-restock-id');
+      if (!restockId) {
+        const idInput = row.querySelector('.restock-id');
+        restockId = idInput ? idInput.value : null;
+      }
+      if (!restockId) return;
       // Set the restock id in the hidden input in the modal
       const modalRestockIdInput = document.getElementById('modal-restock-id');
       if (modalRestockIdInput) modalRestockIdInput.value = restockId;
@@ -197,9 +203,15 @@ document.addEventListener('DOMContentLoaded', function () {
             tbody.innerHTML = '';
             data.details.forEach((detail, idx) => {
               const tr = document.createElement('tr');
+              let expirationDisplay = '';
+              if (detail.ExpirationDate === null || detail.ExpirationDate === '' || detail.ExpirationDate === undefined) {
+                expirationDisplay = '<span class="text-muted">N/A</span>';
+              } else {
+                expirationDisplay = new Date(detail.ExpirationDate).toLocaleDateString();
+              }
               tr.innerHTML = `
                 <td>${detail.ProductName}</td>
-                <td>${detail.ExpirationDate ? new Date(detail.ExpirationDate).toLocaleDateString() : ''}</td>
+                <td>${expirationDisplay}</td>
                 <td>${detail.Count}</td>
                 <td class="text-center">
                   <button class="btn btn-danger btn-sm" data-delete-idx="${idx}">Delete</button>
@@ -269,108 +281,77 @@ document.addEventListener('DOMContentLoaded', function () {
       addMissingProductModal.setAttribute('data-restock-id', modalRestockIdInput ? modalRestockIdInput.value : '');
     });
     // Handle Save button click
-    const addMissingProductForm = document.getElementById('add-missing-product-form');
-    addMissingProductForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const productId = document.getElementById('add-missing-product-select').value;
+    addMissingProductModal.querySelector('.btn-primary').addEventListener('click', function () {
+      const select = document.getElementById('add-missing-product-select');
+      const productId = select.value;
+      const expirationInput = document.getElementById('add-missing-product-expiration-date');
+      const expirationDate = expirationInput ? expirationInput.value : null;
+      const countInput = document.getElementById('add-missing-product-count');
+      const count = countInput ? countInput.value : null;
       if (!productId) {
-        alert('Select a product to add.');
+        alert('Please select a product.');
+        return;
+      }
+      if (!count || isNaN(count) || parseInt(count) < 1) {
+        alert('Please enter a valid count.');
+        return;
+      }
+      // Validate expiration date if provided
+      if (expirationDate && (isNaN(Date.parse(expirationDate)) || new Date(expirationDate) < new Date().setHours(0,0,0,0))) {
+        alert('Enter a valid future expiration date or leave blank.');
         return;
       }
       const restockId = addMissingProductModal.getAttribute('data-restock-id');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Adding...';
       fetch('Persistence/RestockRepository/addMissingProduct.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ restock_id: restockId, product_id: productId })
+        body: JSON.stringify({
+          restock_id: restockId,
+          product_id: productId,
+          expiration_date: expirationDate === '' ? null : expirationDate,
+          count: count
+        })
       })
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            // Close modal and refresh restock details
+            // Close the modal and refresh the restock details
             const modal = bootstrap.Modal.getOrCreateInstance(addMissingProductModal);
             modal.hide();
-            if (lastRestockId) fetchRestockDetails(lastRestockId);
+            window.location.reload(); // Reload the page after adding missing product
           } else {
-            alert(data.message || 'Failed to add product.');
+            alert(data.message || 'Failed to add missing product.');
           }
-        })
-        .catch(() => alert('Server error.'))
-        .finally(() => {
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Save';
         });
     });
   }
 
-  // --- Print Restock Details Logic ---
+  // --- Print Restock Logic ---
   function setupRestockPrintButton() {
-    const modal = document.getElementById('restock-view');
-    if (!modal) return;
-    const table = modal.querySelector('table');
-    if (!table) return;
-    const printBtn = modal.querySelector('.btn-print-restock');
-    if (!printBtn || !printBtn.parentNode) return;
-    const newPrintBtn = printBtn.cloneNode(true);
-    printBtn.parentNode.replaceChild(newPrintBtn, printBtn);
-    newPrintBtn.addEventListener('click', function() {
-      const title = modal.querySelector('.fs-3.fw-semibold')?.textContent || 'Restock Details';
-      const rows = Array.from(table.querySelectorAll('tbody tr'));
-      // Only print rows with at least 3 columns and skip the Add Missing Product row
-      const printableRows = rows.filter(row => row.querySelectorAll('td').length >= 3);
-      if (printableRows.length === 0) {
-        alert('No restock details to print.');
-        return;
-      }
-      let html = `
-        <html>
-        <head>
-          <title>Restock Details</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 40px; }
-            table { border-collapse: collapse; width: 100%; }
-            th, td { border: 1px solid #333; padding: 4px; text-align: left; }
-            th { background: #eee; }
-          </style>
-        </head>
-        <body>
-          <h2>${title}</h2>
-          <table>
-            <thead>
-              <tr><th>Product Name</th><th>Expiration Date</th><th>Product Stock Count</th></tr>
-            </thead>
-            <tbody>
-      `;
-      printableRows.forEach(row => {
-        const tds = row.querySelectorAll('td');
-        const name = tds[0]?.textContent.trim() || '';
-        const expiration = tds[1]?.textContent.trim() || '';
-        const count = tds[2]?.textContent.trim() || '';
-        html += `<tr><td>${name}</td><td>${expiration}</td><td>${count}</td></tr>`;
-      });
-      html += `</tbody></table></body></html>`;
-      const printWindow = window.open('', '', 'width=800,height=600');
-      printWindow.document.write(html);
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-    });
+    const printBtn = document.getElementById('print-restock-btn');
+    if (!printBtn) return;
+    printBtn.onclick = function () {
+      const restockId = document.getElementById('modal-restock-id').value;
+      if (!restockId) return;
+      // Open the print view in a new window
+      window.open('printRestock.php?id=' + encodeURIComponent(restockId), '_blank');
+    };
   }
 
-  // Attach print logic every time the modal is shown
-  (function() {
-    document.addEventListener('shown.bs.modal', function(e) {
-      if (e.target && e.target.id === 'restock-view') {
-        setupRestockPrintButton();
-      }
-    });
-  })();
-
-  // Initial setup: add row and fetch restock details if editing
-  addRestockRow();
-  const initialRestockId = document.getElementById('modal-restock-id')?.value;
-  if (initialRestockId) {
-    fetchRestockDetails(initialRestockId);
+  // Initial setup: hide modals, setup tooltips, etc.
+  const createRestockModal = document.getElementById('create-restock');
+  if (createRestockModal) {
+    const modal = bootstrap.Modal.getOrCreateInstance(createRestockModal);
+    modal.hide();
   }
+  const restockViewModal = document.getElementById('restock-view');
+  if (restockViewModal) {
+    const modal = bootstrap.Modal.getOrCreateInstance(restockViewModal);
+    modal.hide();
+  }
+  // Setup tooltips
+  const tooltipTriggerList = Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.forEach(tooltipTriggerEl => {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
 });
