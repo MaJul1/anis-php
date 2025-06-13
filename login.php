@@ -62,6 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
+        <?php if (isset($_GET['register']) && $_GET['register'] === 'success'): ?>
+          <div class="alert alert-success" role="alert">
+            Registration successful! You can now log in.
+          </div>
+        <?php endif; ?>
         <?php if ($error): ?>
           <div class="alert alert-danger" role="alert">
             <?= htmlspecialchars($error) ?>

@@ -239,6 +239,13 @@ document.addEventListener('DOMContentLoaded', function () {
                   .then(res => res.json())
                   .then(data => {
                     if (data.success) {
+                      // Remove the deleted detail from lastRestockDetails
+                      lastRestockDetails.splice(idx, 1);
+                      // If that was the last product, reload the page
+                      if (lastRestockDetails.length === 0) {
+                        window.location.reload();
+                        return;
+                      }
                       if (data.deletedRestock) {
                         // If the whole restock was deleted, close the modal and refresh the table
                         const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('restock-view'));
