@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="bg-light">
-  <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="container d-flex flex-column justify-content-md-center mt-4 mt-md-0 align-items-center" style="min-height: 100vh;">
     <div class="card shadow-sm p-4" style="min-width: 320px; max-width: 400px; width: 100%;">
       <img src="assets/logo.png" alt="" style="max-width: 150px;" class="align-self-center">
       <h2 class="mb-3 text-center">ANIS</h2>

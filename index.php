@@ -26,11 +26,15 @@
   <body>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
-      <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom position-fixed" style="height: 50px; background-color: var(--bs-secondary-bg); width: 100%">
+      <a class="me-auto" data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
         <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
+      <a href="user.php">
+        <i class="bi bi-person-circle fs-1 me-3 link-body-emphasis"></i>
+      </a>
     </div>
+    <div style="height: 50px;" class="d-md-none"></div>
 
     <div class="d-flex">
       <div id="sidebar"></div>

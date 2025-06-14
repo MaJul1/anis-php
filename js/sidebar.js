@@ -50,11 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
           <li><a class="dropdown-item" href="#">Dark</a></li>
         </ul>
       </div>
-      <hr class="mb-1">
-      <a href="user.php" class="d-flex align-items-center text-decoration-none link-body-emphasis ps-2 rounded">
-        <i class="bi bi-person-circle fs-1 me-3"></i>
-        <span id="sidebar-username">Hello</span>
-      </a>
+      <div class="d-none d-md-block">
+        <hr class="mb-1">
+        <a href="user.php" class="d-flex align-items-center text-decoration-none link-body-emphasis ps-2 rounded">
+          <i class="bi bi-person-circle fs-1 me-3"></i>
+          <span id="sidebar-username">Hello</span>
+        </a>      
+      </div>
     </div>
     <div class="d-none d-md-block" style="min-width: 235px; height: 100%;"></div>
   `;

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="bootsrap/js/bootstrap.bundle.min.js"></script>
     <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="cs/collumn.css">
   </head>
   <body>
     <!-- modal-create-product -->
@@ -186,16 +187,16 @@
 
      <!-- modal-for-archives -->
       <div class="modal fade" id="archived-products">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <span class="fs-3 fw-semibold">Archived Products</span>
             </div>
             <div class="modal-body">
-              <table class="table table-striped table-hover table-bordered" id="archived-product-table">
+              <table class="table table-striped table-hover table-bordered" id="archived-product-table" style="min-width: 450px;">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col" class="d-none d-md-table-cell">#</th>
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Unit Size</th>
@@ -213,13 +214,15 @@
                       while ($row = $result->fetch_assoc()) {
                           $unitSize = $row['QuantityPerUnit'] . ' ' . $row['Unit'];
                           echo '<tr data-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
-                          echo '<th>' . $i . '</th>';
+                          echo '<th class="d-none d-md-table-cell">' . $i . '</th>';
                           echo '<td>' . htmlspecialchars($row['Name']) . '</td>';
                           echo '<td>' . number_format($row['Price'], 2) . ' Php</td>';
                           echo '<td>' . htmlspecialchars($unitSize) . '</td>';
                           echo '<td class="text-center">';
-                          echo '<button class="btn btn-primary me-2">Unarchive</button>';
-                          echo '<button class="btn btn-danger" data-action="delete">Delete</button>';
+                          echo '<button class="btn btn-primary me-2 d-none d-md-block">Unarchive</button>';
+                          echo '<button class="btn btn-danger d-none d-md-block" data-action="delete">Delete</button>';
+                          echo '<button class="btn btn-primary me-2 d-md-none"><i class="bi bi-archive-fill"></i></button>';
+                          echo '<button class="btn btn-danger d-md-none" data-action="delete">X</button>';
                           echo '</td>';
                           echo '</tr>';
                           $i++;
@@ -239,11 +242,15 @@
       </div>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
-      <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom position-fixed" style="height: 50px; background-color: var(--bs-secondary-bg); width: 100%">
+      <a class="me-auto" data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
         <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
+      <a href="user.php">
+        <i class="bi bi-person-circle fs-1 me-3 link-body-emphasis"></i>
+      </a>
     </div>
+    <div class="d-md-none" style="height: 50px;"></div>
 
     <div class="d-flex">
       <div id="sidebar"></div>
@@ -253,7 +260,8 @@
           <div class="input-group justify-content-center">
             <input type="text" class="form-control" placeholder="Product Name" aria-label="Product Name" aria-describedby="button-addon2" list="product-suggestions">
             <datalist id="product-suggestions"></datalist>
-            <button class="btn btn-outline-secondary me-2" type="button" id="button-search">Search</button>
+            <button class="btn btn-outline-secondary me-2 d-none d-md-block" type="button" id="button-search">Search</button>
+            <button class="btn btn-outline-secondary me-2 d-md-none" type="button" id="button-search-small"><i class="bi bi-search"></i></button>
           </div>
           <button class="d-none d-lg-block btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" style="min-width: 160px;">Archived Products</button>
           <button class="d-lg-none btn btn-primary text-light me-2" data-bs-toggle="modal" data-bs-target="#archived-products" ><i class="bi bi-archive"></i></button>
@@ -264,11 +272,11 @@
           <table class="table table-striped table-hover table-bordered" id="product-table">
             <thead>
               <tr>
-                <th scope="col">#</th>
+                <th scope="col" class="d-none d-md-table-cell">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Unit Size</th>
-                <th sorted="col">Current Stocks</th>
+                <th sorted="col" class="col-small">Current Stocks</th>
               </tr>
             </thead>
             <tbody>
@@ -291,11 +299,11 @@
                       echo ' data-expwarn="' . htmlspecialchars($row['ExpirationWarningThreshold'], ENT_QUOTES) . '"';
                       echo ' data-stockwarn="' . htmlspecialchars($row['OutOfStockWarningThreshold'], ENT_QUOTES) . '"';
                       echo '>';
-                      echo '<th>' . $i . '</th>';
+                      echo '<th class="d-none d-md-table-cell">' . $i . '</th>';
                       echo '<td>' . htmlspecialchars($name) . '</td>';
                       echo '<td>' . number_format($row['Price'], 2) . ' Php</td>';
                       echo '<td>' . htmlspecialchars($unitSize) . '</td>';
-                      echo '<td>' . $row['CurrentStockNumber'] . '</td>';
+                      echo '<td class="col-small">' . $row['CurrentStockNumber'] . '</td>';
                       echo '</tr>';
                       $i++;
                   }

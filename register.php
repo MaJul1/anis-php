@@ -16,8 +16,8 @@ unset($_SESSION['register_errors'], $_SESSION['register_username']);
   <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 <body class="bg-light">
-  <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <div class="card shadow-sm p-4" style="min-width: 380px; max-width: 400px; width: 100%;">
+  <div class="container d-flex flex-column justify-content-md-center mt-4 mt-md-0 align-items-center" style="height: 100vh;">
+    <div class="card shadow-sm p-4" style="min-width: 320px; max-width: 400px; width: 100%;">
       <h2 class="text-center mb-3">Register</h2>
       <?php if (!empty($register_errors)): ?>
         <div class="alert alert-danger">
