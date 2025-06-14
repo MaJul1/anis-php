@@ -2,8 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   // Find the Expired Stocks Warning table and the Checked button
-  const expiredTable = document.querySelectorAll('.table-responsive')[1]?.querySelector('table');
-  const checkedBtn = document.querySelector('.btn.btn-primary.me-1');
+  const expiredTable = document.getElementById('expired-restock-table');
+  const checkedBtn = document.getElementById('check-expired-button');
   if (!expiredTable || !checkedBtn) return;
 
   // Check if there are any data rows (not the empty message row)
@@ -15,14 +15,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!confirm('Are you sure you want to check all expired stocks in the list?')) return;
     // Collect expiration dates and product names from the table
     const rows = Array.from(expiredTable.querySelectorAll('tbody tr')).filter(row => !row.querySelector('td[colspan]'));
-    const items = rows.map(row => {
-      const tds = row.querySelectorAll('td');
-      return {
-        name: tds[0]?.textContent.trim(),
-        expiration: tds[1]?.textContent.trim(),
-        count: tds[2]?.textContent.trim()
-      };
-    });
+    const items = rows
+      .map(row => {
+        const id = row.getAttribute('data-restock-detail-id');
+        return id && !isNaN(Number(id)) && Number(id) > 0 ? { id: Number(id) } : null;
+      })
+      .filter(item => item !== null);
     if (items.length === 0) return;
     // Send AJAX request to mark all as checked
     fetch('Persistence/RestockRepository/checkAllExpired.php', {
@@ -47,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('DOMContentLoaded', function() {
     const printBtn = document.querySelector('.btn.btn-secondary');
     // Find the Expired Stocks Warning table
-    const expiredTable = document.querySelectorAll('.table-responsive')[1]?.querySelector('table');
+    const expiredTable = document.getElementById('expired-restock-table');
     if (!printBtn || !expiredTable) return;
     printBtn.addEventListener('click', function() {
       // Collect data rows (skip empty message row)

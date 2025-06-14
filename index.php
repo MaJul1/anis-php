@@ -153,7 +153,8 @@
           <span class="fs-4 fw-semibold">Expired Stocks Warning</span>
           <div class="table-responsive mt-4" style="max-height: 350px">
             <table
-              class="table table-striped table-bordered align-middle">
+              class="table table-striped table-bordered align-middle"
+              id="expired-restock-table">
               <thead>
                 <tr>
                   <th scope="col" class="d-none d-md-block">#</th>
@@ -166,7 +167,7 @@
               <?php
                 $userId = $_SESSION['user_id'];
                 $today = date('Y-m-d');
-                $sql = "SELECT p.Name, p.QuantityPerUnit, p.Unit, p.Price, rd.ExpirationDate, rd.Count
+                $sql = "SELECT rd.Id, p.Name, p.QuantityPerUnit, p.Unit, p.Price, rd.ExpirationDate, rd.Count
                         FROM RestockDetail rd
                         INNER JOIN Product p ON rd.ProductId = p.Id
                         WHERE rd.ExpirationDate IS NOT NULL AND rd.ExpirationDate != ''
@@ -180,13 +181,15 @@
                 if ($result && $result->num_rows > 0) {
                     $i = 1;
                     while ($row = $result->fetch_assoc()) {
+                        $restockDetailId = $row['Id']; // Store the restock product Id as an attribute
                         $name = $row['Name'] . ', ' . $row['QuantityPerUnit'] . ' ' . $row['Unit'] . ', ' . number_format($row['Price'], 2);
                         $expiration = date('F j, Y', strtotime($row['ExpirationDate']));
-                        echo '<tr>';
+                        echo '<tr data-restock-detail-id="' . $restockDetailId . '">';
                         echo '<th scope="row" class="d-none d-md-block">' . $i . '</th>';
                         echo '<td>' . htmlspecialchars($name) . '</td>';
                         echo '<td>' . htmlspecialchars($expiration) . '</td>';
                         echo '<td>' . $row['Count'] . '</td>';
+                        // You can now use $restockDetailId as needed
                         echo '</tr>';
                         $i++;
                     }
@@ -198,7 +201,7 @@
             </table>
           </div>
           <div class="d-flex justify-content-end">
-            <button class="btn btn-primary me-1">Checked</button>
+            <button class="btn btn-primary me-1" id="check-expired-button">Checked</button>
             <button class="btn btn-secondary">Print Checklist</button>
           </div>
         </div>

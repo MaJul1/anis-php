@@ -20,25 +20,18 @@ $success = true;
 $error = '';
 
 foreach ($data['items'] as $item) {
-    // Find the RestockDetail row by product name, expiration date, and count
-    $name = $conn->real_escape_string($item['name']);
-    $expiration = date('Y-m-d', strtotime($item['expiration']));
-    $count = (int)$item['count'];
-    // Get ProductId and check ownership
-    $sql = "SELECT Id FROM Product WHERE CONCAT(Name, ', ', QuantityPerUnit, ', ', Unit, ', ', FORMAT(Price, 2)) = '$name' AND OwnerId = $userId LIMIT 1";
-    $res = $conn->query($sql);
-    if ($res && $res->num_rows > 0) {
-        $row = $res->fetch_assoc();
-        $productId = $row['Id'];
-        // Update RestockDetail only if the parent restock belongs to the user
-        $sql2 = "UPDATE RestockDetail rd JOIN Restock r ON rd.RestockId = r.Id SET rd.IsExpiredChecked=TRUE WHERE rd.ProductId=$productId AND rd.ExpirationDate='$expiration' AND rd.Count=$count AND rd.IsExpiredChecked=FALSE AND r.OwnerId=$userId LIMIT 1";
-        if (!$conn->query($sql2)) {
-            $success = false;
-            $error = 'Failed to update some records.';
-        }
-    } else {
+    // Use the id directly
+    $id = isset($item['id']) ? (int)$item['id'] : 0;
+    if ($id <= 0) {
         $success = false;
-        $error = 'Product not found or unauthorized: ' . $name;
+        $error = 'Invalid restock detail id.';
+        continue;
+    }
+    // Update RestockDetail only if the parent restock belongs to the user
+    $sql = "UPDATE RestockDetail rd JOIN Restock r ON rd.RestockId = r.Id SET rd.IsExpiredChecked=TRUE WHERE rd.Id=$id AND rd.IsExpiredChecked=FALSE AND r.OwnerId=$userId";
+    if (!$conn->query($sql)) {
+        $success = false;
+        $error = 'Failed to update some records.';
     }
 }
 
