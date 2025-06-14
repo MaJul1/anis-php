@@ -71,13 +71,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const theme = this.textContent.trim().toLowerCase();
         if (theme === 'light' || theme === 'dark') {
           document.documentElement.setAttribute('data-bs-theme', theme);
-          // Optionally, persist theme in localStorage
+          document.cookie = 'theme=' + theme + '; path=/; max-age=31536000'; // 1 year
           localStorage.setItem('bs-theme', theme);
         }
       });
     });
-    // On load, apply saved theme
-    const savedTheme = localStorage.getItem('bs-theme');
+    // On load, apply saved theme from cookie or localStorage
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    const cookieTheme = getCookie('theme');
+    const savedTheme = cookieTheme || localStorage.getItem('bs-theme');
     if (savedTheme === 'light' || savedTheme === 'dark') {
       document.documentElement.setAttribute('data-bs-theme', savedTheme);
     }
