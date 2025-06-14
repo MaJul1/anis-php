@@ -40,7 +40,7 @@ CREATE TABLE RestockDetail
     Id INT AUTO_INCREMENT PRIMARY KEY,
     ExpirationDate DATE,
     Count INT,
-    IsExpiredChecked TINYINT(1) DEFAULT 0,
+    IsExpiredChecked TINYINT(1) DEFAULT 0 NULL,
     ProductId INT,
     RestockId INT,
     FOREIGN KEY (ProductId) REFERENCES Product(Id),
@@ -64,5 +64,3 @@ CREATE TABLE StockOutDetail
     FOREIGN KEY (ProductId) REFERENCES Product(Id),
     FOREIGN KEY (StockOutId) REFERENCES StockOut(Id)
 );
-
-ALTER TABLE RestockDetail MODIFY COLUMN ExpirationDate DATE NULL;

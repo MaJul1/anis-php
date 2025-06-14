@@ -326,7 +326,7 @@
       <?php
         include_once __DIR__ . '/Persistence/dbconn.php';
         $userId = $_SESSION['user_id'];
-        $query = "SELECT Name FROM Product WHERE OwnerId = $userId;";
+        $query = "SELECT Name FROM Product WHERE OwnerId = $userId AND Archived = false;";
         $result = $conn->query($query);
         if ($result && $result->num_rows > 0) {
           $names = [];
