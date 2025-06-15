@@ -805,7 +805,7 @@
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
                 <mxCell id="pCZ1EamylTok6X9mzk1j-2" value="" style="shape=table;startSize=0;container=1;collapsible=0;childLayout=tableLayout;" vertex="1" parent="1">
-                    <mxGeometry x="20" y="70" width="525" height="220" as="geometry"/>
+                    <mxGeometry x="20" y="70" width="525" height="160" as="geometry"/>
                 </mxCell>
                 <mxCell id="pCZ1EamylTok6X9mzk1j-3" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
                     <mxGeometry width="525" height="40" as="geometry"/>
@@ -843,7 +843,7 @@
                         <mxRectangle width="105" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-11" value="Primary key of the table restock detail." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-9">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-11" value="Primary key of the table stock out detail." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-9">
                     <mxGeometry x="105" width="225" height="30" as="geometry">
                         <mxRectangle width="225" height="30" as="alternateBounds"/>
                     </mxGeometry>
@@ -863,43 +863,15 @@
                         <mxRectangle width="55" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-15" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-21" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
                     <mxGeometry y="70" width="525" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-16" value="Expiration Date" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-15">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-22" value="Stock Out Count" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-21">
                     <mxGeometry width="105" height="30" as="geometry">
                         <mxRectangle width="105" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-17" value="The expiration date of the certain restock." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-15">
-                    <mxGeometry x="105" width="225" height="30" as="geometry">
-                        <mxRectangle width="225" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-18" value="Date" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-15">
-                    <mxGeometry x="330" width="80" height="30" as="geometry">
-                        <mxRectangle width="80" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-19" value="No" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-15">
-                    <mxGeometry x="410" width="60" height="30" as="geometry">
-                        <mxRectangle width="60" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-20" value="n/a" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-15">
-                    <mxGeometry x="470" width="55" height="30" as="geometry">
-                        <mxRectangle width="55" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-21" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
-                    <mxGeometry y="100" width="525" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-22" value="Count" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-21">
-                    <mxGeometry width="105" height="30" as="geometry">
-                        <mxRectangle width="105" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-23" value="Count of product restock." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-21">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-23" value="Count of product stock out." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-21">
                     <mxGeometry x="105" width="225" height="30" as="geometry">
                         <mxRectangle width="225" height="30" as="alternateBounds"/>
                     </mxGeometry>
@@ -919,36 +891,8 @@
                         <mxRectangle width="55" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-27" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
-                    <mxGeometry y="130" width="525" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-28" value="Is Expired Checked" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-27">
-                    <mxGeometry width="105" height="30" as="geometry">
-                        <mxRectangle width="105" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-29" value="Indicates whether a &lt;span style=&quot;&quot; data-end=&quot;188&quot; data-start=&quot;164&quot;&gt;check for expiration&lt;/span&gt; has been performed" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-27">
-                    <mxGeometry x="105" width="225" height="30" as="geometry">
-                        <mxRectangle width="225" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-30" value="Bool" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-27">
-                    <mxGeometry x="330" width="80" height="30" as="geometry">
-                        <mxRectangle width="80" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-31" value="Yes" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-27">
-                    <mxGeometry x="410" width="60" height="30" as="geometry">
-                        <mxRectangle width="60" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-32" value="false" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-27">
-                    <mxGeometry x="470" width="55" height="30" as="geometry">
-                        <mxRectangle width="55" height="30" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
                 <mxCell id="pCZ1EamylTok6X9mzk1j-33" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
-                    <mxGeometry y="160" width="525" height="30" as="geometry"/>
+                    <mxGeometry y="100" width="525" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="pCZ1EamylTok6X9mzk1j-34" value="Product Id" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-33">
                     <mxGeometry width="105" height="30" as="geometry">
@@ -976,14 +920,14 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="pCZ1EamylTok6X9mzk1j-39" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-2">
-                    <mxGeometry y="190" width="525" height="30" as="geometry"/>
+                    <mxGeometry y="130" width="525" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-40" value="Restock Id" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-39">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-40" value="Stock Out Id" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-39">
                     <mxGeometry width="105" height="30" as="geometry">
                         <mxRectangle width="105" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="pCZ1EamylTok6X9mzk1j-41" value="Foreign key of the restock." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-39">
+                <mxCell id="pCZ1EamylTok6X9mzk1j-41" value="Foreign key of the stock out." style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;" vertex="1" parent="pCZ1EamylTok6X9mzk1j-39">
                     <mxGeometry x="105" width="225" height="30" as="geometry">
                         <mxRectangle width="225" height="30" as="alternateBounds"/>
                     </mxGeometry>
