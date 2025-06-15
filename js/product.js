@@ -31,6 +31,7 @@ productNames.forEach(name => {
 document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.querySelector('input[placeholder="Product Name"]');
   const searchButton = document.getElementById("button-search");
+  const searchButtonSmall = document.getElementById("button-search-small");
   const table = document.getElementById("product-table");
   const tbody = table.querySelector("tbody");
   const rows = Array.from(tbody.querySelectorAll("tr"));
@@ -69,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Filter when search button is clicked
   searchButton.addEventListener("click", filterTable);
+  searchButtonSmall.addEventListener("click", filterTable);
 });
 
 document.addEventListener('DOMContentLoaded', function () {

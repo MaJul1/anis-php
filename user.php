@@ -47,20 +47,21 @@ if (!isset($_SESSION['user_id'])) {
           <div class="modal-header">
             <span class="fs-3 fw-semibold">Update Password</span>
           </div>
-          <form action="update-password.php">
+          <form action="update-password.php" method="POST" id="update-password-form">
             <div class="modal-body">
               <div class="mb-3">
                 <label for="current-password">Current Password</label>
-                <input type="password" id="current-password" class="form-control">
+                <input type="password" id="current-password" name="current_password" class="form-control" required>
               </div>
               <div class="mb-3">
                 <label for="new-password">New Password</label>
-                <input type="password" id="new-password" class="form-control">
+                <input type="password" id="new-password" name="new_password" class="form-control" required>
               </div>
               <div class="mb-3">
                 <label for="retype-password">Retype Password</label>
-                <input type="password" id="retype-password" class="form-control">
+                <input type="password" id="retype-password" name="retype_password" class="form-control" required>
               </div>
+              <div id="password-error" class="text-danger mb-2" style="display:none;"></div>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Save</button>
@@ -70,17 +71,35 @@ if (!isset($_SESSION['user_id'])) {
         </div>
       </div>
     </div>
+    <script>
+      document.getElementById('update-password-form').addEventListener('submit', function(e) {
+        var newPass = document.getElementById('new-password').value;
+        var retypePass = document.getElementById('retype-password').value;
+        var errorDiv = document.getElementById('password-error');
+        if (newPass !== retypePass) {
+          e.preventDefault();
+          errorDiv.textContent = 'New passwords do not match!';
+          errorDiv.style.display = 'block';
+        } else {
+          errorDiv.style.display = 'none';
+        }
+      });
+    </script>
   <!-- sidebar (mobile toggle) -->
-  <div class="d-flex bg-light ps-3 d-md-none pt-1" style="height: 50px;">
-      <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
-        <i class="bi bi-list border border-1 border-secondary rounded text-dark fs-2 ps-2 pe-2"></i>
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom position-fixed" style="height: 50px; background-color: var(--bs-secondary-bg); width: 100%">
+      <a class="me-auto" data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+        <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
+      </a>
+      <a href="user.php">
+        <i class="bi bi-person-circle fs-1 me-3 link-body-emphasis"></i>
       </a>
     </div>
+    <div class="d-md-none" style="height: 50px;"></div>
 
     <div class="d-flex">
       <div id="sidebar"></div>
       <!-- body -->
-      <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column" style="min-width: 400px; max-width: 450px;">
+      <div class="container ms-md-4 p-md-5 pt-3 d-flex flex-column" style="max-width: 450px;">
         <h1>User Information</h1>
         <span>Username</span>
         <div class="input-group mb-3">

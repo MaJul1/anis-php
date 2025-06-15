@@ -1,0 +1,36 @@
+/* Default width for mobile */
+.col-small {
+width: 50px;
+flex: none;
+}
+
+.col-medium {
+width: 100px;
+flex: none;
+}
+
+/* Medium screens and up (≥768px) */
+@media (min-width: 768px) {
+.col-small {
+    width: 100px;
+    flex: none;
+}
+
+.col-medium {
+    width: auto;
+    flex: none;
+}
+}
+
+/* Large screens and up (≥992px) */
+@media (min-width: 992px) {
+.col-small {
+    width: auto;
+    flex: none;
+}
+
+.col-medium {
+    width: auto; 
+    flex: none;
+}
+}

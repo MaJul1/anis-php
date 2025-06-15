@@ -21,6 +21,7 @@ $stockoutId = isset($data['stockout_id']) ? intval($data['stockout_id']) : 0;
 $productId = isset($data['product_id']) ? intval($data['product_id']) : 0;
 $count = isset($data['count']) ? intval($data['count']) : 0;
 
+// Validate input
 if (!$stockoutId || !$productId || !$count) {
     http_response_code(400);
     echo json_encode(['error' => 'Missing required fields']);
@@ -34,6 +35,7 @@ $stmt->execute();
 $stmt->store_result();
 if ($stmt->num_rows === 0) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized.']);
+    $stmt->close();
     exit;
 }
 $stmt->close();
@@ -43,6 +45,7 @@ $stmt->execute();
 $stmt->store_result();
 if ($stmt->num_rows === 0) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized product.']);
+    $stmt->close();
     exit;
 }
 $stmt->close();
@@ -67,8 +70,8 @@ if ($currentStock < $count) {
 
 try {
     $conn->begin_transaction();
-    // Insert into stockoutdetail
-    $stmt = $conn->prepare("INSERT INTO stockoutdetail (StockOutId, ProductId, Count) VALUES (?, ?, ?)");
+    // Insert into stockoutdetail (fix: use correct column name StockOutCount)
+    $stmt = $conn->prepare("INSERT INTO stockoutdetail (StockOutId, ProductId, StockOutCount) VALUES (?, ?, ?)");
     $stmt->bind_param('iii', $stockoutId, $productId, $count);
     $stmt->execute();
     $stmt->close();

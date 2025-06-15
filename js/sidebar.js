@@ -50,11 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
           <li><a class="dropdown-item" href="#">Dark</a></li>
         </ul>
       </div>
-      <hr class="mb-1">
-      <a href="user.php" class="d-flex align-items-center text-decoration-none link-body-emphasis ps-2 rounded">
-        <i class="bi bi-person-circle fs-1 me-3"></i>
-        <span id="sidebar-username">Hello</span>
-      </a>
+      <div class="d-none d-md-block">
+        <hr class="mb-1">
+        <a href="user.php" class="d-flex align-items-center text-decoration-none link-body-emphasis ps-2 rounded">
+          <i class="bi bi-person-circle fs-1 me-3"></i>
+          <span id="sidebar-username">Hello</span>
+        </a>      
+      </div>
     </div>
     <div class="d-none d-md-block" style="min-width: 235px; height: 100%;"></div>
   `;
@@ -69,13 +71,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const theme = this.textContent.trim().toLowerCase();
         if (theme === 'light' || theme === 'dark') {
           document.documentElement.setAttribute('data-bs-theme', theme);
-          // Optionally, persist theme in localStorage
+          document.cookie = 'theme=' + theme + '; path=/; max-age=31536000'; // 1 year
           localStorage.setItem('bs-theme', theme);
         }
       });
     });
-    // On load, apply saved theme
-    const savedTheme = localStorage.getItem('bs-theme');
+    // On load, apply saved theme from cookie or localStorage
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    const cookieTheme = getCookie('theme');
+    const savedTheme = cookieTheme || localStorage.getItem('bs-theme');
     if (savedTheme === 'light' || savedTheme === 'dark') {
       document.documentElement.setAttribute('data-bs-theme', savedTheme);
     }

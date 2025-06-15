@@ -16,6 +16,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="bootsrap/js/bootstrap.bundle.min.js"></script>
     <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="cs/collumn.css">
 </head>
 <body>
     <!-- modal-create-stock-out -->
@@ -58,17 +59,17 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- modal-view-stock-out -->
     <div class="modal fade" id="restock-view">
-      <div class="modal-dialog modal-xl">
+      <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
             <span class="fs-3 fw-semibold" id="stockout-modal-title">Stock Out Details</span>
           </div>
           <div class="modal-body">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered" style="min-width: 450px;">
               <thead>
                 <tr>
                   <th>Product Name</th>
-                  <th>Product Stock Count</th>
+                  <th class="col-medium">Stock Out Count</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -134,7 +135,7 @@ if (!isset($_SESSION['user_id'])) {
             </form>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary" id="save-stockout-missing-product-button">Save</button>
             <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
@@ -142,11 +143,15 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 
     <!-- sidebar (mobile toggle) -->
-    <div class="d-flex ps-3 d-md-none pt-1 border-bottom" style="height: 50px; background-color: var(--bs-secondary-bg);">
-      <a data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+    <div class="d-flex ps-3 d-md-none pt-1 border-bottom position-fixed" style="height: 50px; background-color: var(--bs-secondary-bg); width: 100%">
+      <a class="me-auto" data-bs-toggle="offcanvas" href="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
         <i class="bi bi-list border border-1 border-secondary rounded fs-2 ps-2 pe-2 link-body-emphasis"></i>
       </a>
+      <a href="user.php">
+        <i class="bi bi-person-circle fs-1 me-3 link-body-emphasis"></i>
+      </a>
     </div>
+    <div class="d-md-none" style="height: 50px;"></div>
 
     <div class="d-flex">
       <div id="sidebar"></div>
@@ -161,9 +166,9 @@ if (!isset($_SESSION['user_id'])) {
           class="table table-striped table-hover table-bordered">
           <thead>
             <tr>
-              <th>#</th>
+              <th class="d-none d-md-table-cell">#</th>
               <th>Stock Out Date</th>
-              <th>Number of Products</th>
+              <th class="col-medium">Number of Products</th>
             </tr>
           </thead>
           <tbody>
@@ -175,7 +180,7 @@ if (!isset($_SESSION['user_id'])) {
                     LEFT JOIN stockoutdetail sd ON s.Id = sd.StockOutId
                     WHERE s.OwnerId = ?
                     GROUP BY s.Id, s.CreatedDate
-                    ORDER BY s.CreatedDate DESC");
+                    ORDER BY s.Id DESC");
             $stmt->bind_param('i', $userId);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -184,7 +189,7 @@ if (!isset($_SESSION['user_id'])) {
                 while ($row = $result->fetch_assoc()) {
                     $stockOutDate = date('F j, Y', strtotime($row['CreatedDate']));
                     echo '<tr data-bs-toggle="modal" data-bs-target="#restock-view" data-stockout-id="' . htmlspecialchars($row['Id'], ENT_QUOTES) . '">';
-                    echo '<th>' . $i . '</th>';
+                    echo '<th class="d-none d-md-table-cell">' . $i . '</th>';
                     echo '<td>' . htmlspecialchars($stockOutDate) . '</td>';
                     echo '<td>' . $row['ProductCount'] . '</td>';
                     echo '</tr>';
