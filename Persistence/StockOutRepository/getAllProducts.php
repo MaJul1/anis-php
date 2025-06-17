@@ -9,7 +9,7 @@ include_once __DIR__ . '/../dbconn.php';
 header('Content-Type: application/json');
 
 $userId = $_SESSION['user_id'];
-$sql = "SELECT Id, Name FROM product WHERE Archived = 0 AND OwnerId = ?";
+$sql = "SELECT Id, Name, QuantityPerUnit, Unit FROM product WHERE Archived = 0 AND OwnerId = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $userId);
 $stmt->execute();

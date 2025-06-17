@@ -10,7 +10,7 @@ if (!$userId) {
 }
 
 try {
-    $stmt = $conn->prepare("SELECT Id AS ProductID, Name AS ProductName FROM Product WHERE Archived = 0 AND OwnerId = ? ORDER BY Name ASC");
+    $stmt = $conn->prepare("SELECT Id AS ProductID, Name AS ProductName, QuantityPerUnit AS QPU, Unit AS Unit FROM Product WHERE Archived = 0 AND OwnerId = ? ORDER BY Name ASC");
     $stmt->bind_param('i', $userId);
     $stmt->execute();
     $result = $stmt->get_result();

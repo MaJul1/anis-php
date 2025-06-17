@@ -164,7 +164,7 @@ function addStockOutRow() {
     <td>
       <select class="form-select product-select" required aria-label="Product Name">
         <option value="">Select product</option>
-        ${productOptions.map(p => `<option value="${p.Id}">${p.Name}</option>`).join('')}
+        ${productOptions.map(p => `<option value="${p.Id}">${p.Name} ${p.QuantityPerUnit}${p.Unit}</option>`).join('')}
       </select>
       <div class="invalid-feedback"></div>
     </td>

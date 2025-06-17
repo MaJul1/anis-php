@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <td>
         <select class="form-select product-select" required aria-label="Product Name">
           <option value="">Select product</option>
-          ${productOptions.map(p => `<option value="${p.ProductID}">${p.ProductName}</option>`).join('')}
+          ${productOptions.map(p => `<option value="${p.ProductID}">${p.ProductName} ${p.QPU}${p.Unit}</option>`).join('')}
         </select>
         <div class="invalid-feedback"></div>
       </td>
