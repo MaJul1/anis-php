@@ -150,7 +150,7 @@
           </div>
         </div>
         <div class="border border-1 border-opacity-25 rounded p-2">
-          <span class="fs-4 fw-semibold">Expired Stocks Warning</span>
+          <span class="fs-4 fw-semibold">Expired Stock Warning</span>
           <div class="table-responsive mt-4" style="max-height: 350px">
             <table
               class="table table-striped table-bordered align-middle"
